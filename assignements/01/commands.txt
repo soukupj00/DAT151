@@ -1,31 +1,6 @@
-# DAT151: Assignment 1 Report
-
-**Group Members:** Soukup Jan
-
-**Date:** February 9, 2026
-
----
-
-## Part 1 - The Filesystem
-
-### Task 1: Filesystem basics
-
-**1. Describe some of the key differences between the Linux/UNIX filesystem and Windows. How are files and folders organised in Linux/UNIX?**
-
-**Hierarchy:** Linux uses a single unified tree structure starting at the root (`/`), whereas Windows uses drive letters (C:, D:) for different partitions.
-
-**Case sensitivity:** Linux filenames are case-sensitive (`File.txt` and `file.txt` are different), while Windows is generally case-insensitive.
-
-**File extensions:** Linux identifies file types by metadata/content rather than strictly relying on extensions like `.exe` or `.txt`.
-
-**2. What is a mount point?**
-
-**Definition:** A mount point is a directory in the existing filesystem hierarchy where a new filesystem (like a partition) is attached to make it accessible.
-
-**Command execution (partition + mount):**
-
-```bash
+Task 2: 10GiB partition
 soukup@localhost:~$ sudo parted -s /dev/sda unit s print free
+[sudo] password for soukup: 
 Model: ATA SAMSUNG MZ7PD256 (scsi)
 Disk /dev/sda: 500118192s
 Sector size (logical/physical): 512B/512B
@@ -33,61 +8,84 @@ Partition Table: gpt
 Disk Flags: 
 
 Number  Start       End         Size        File system  Name                  Flags
-	34s         2047s       2014s       Free Space
+        34s         2047s       2014s       Free Space
  1      2048s       1230847s    1228800s    fat32        EFI System Partition  boot, esp
  2      1230848s    3327999s    2097152s    xfs                                bls_boot
  3      3328000s    481042431s  477714432s                                     lvm
-	481042432s  500118158s  19075727s   Free Space
+        481042432s  500118158s  19075727s   Free Space
+
+soukup@localhost:~$ sudo parted -s /dev/sda unit MiB print free
+Model: ATA SAMSUNG MZ7PD256 (scsi)
+Disk /dev/sda: 244198MiB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start      End        Size       File system  Name                  Flags
+        0.02MiB    1.00MiB    0.98MiB    Free Space
+ 1      1.00MiB    601MiB     600MiB     fat32        EFI System Partition  boot, esp
+ 2      601MiB     1625MiB    1024MiB    xfs                                bls_boot
+ 3      1625MiB    234884MiB  233259MiB                                     lvm
+        234884MiB  244198MiB  9314MiB    Free Space
+
+soukup@localhost:~$ sudo parted -s /dev/sda unit GiB print free
+Model: ATA SAMSUNG MZ7PD256 (scsi)
+Disk /dev/sda: 238GiB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start    End      Size     File system  Name                  Flags
+        0.00GiB  0.00GiB  0.00GiB  Free Space
+ 1      0.00GiB  0.59GiB  0.59GiB  fat32        EFI System Partition  boot, esp
+ 2      0.59GiB  1.59GiB  1.00GiB  xfs                                bls_boot
+ 3      1.59GiB  229GiB   228GiB                                      lvm
+        229GiB   238GiB   9.10GiB  Free Space
 
 soukup@localhost:~$ sudo parted -s /dev/sda mkpart "dat151_assignment1_partition" xfs 481042432s 100%
+[sudo] password for soukup: 
+soukup@localhost:~$ sudo parted -s /dev/sta print
+Error: Could not stat device /dev/sta - No such file or directory.
+soukup@localhost:~$ sudo parted -s /dev/sda print
+Model: ATA SAMSUNG MZ7PD256 (scsi)
+Disk /dev/sda: 256GB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start   End     Size    File system  Name                          Flags
+ 1      1049kB  630MB   629MB   fat32        EFI System Partition          boot, esp
+ 2      630MB   1704MB  1074MB  xfs                                        bls_boot
+ 3      1704MB  246GB   245GB                                              lvm
+ 4      246GB   256GB   9766MB               dat151_assignment1_partition
+
 soukup@localhost:~$ sudo mkfs -t xfs /dev/sda4
 meta-data=/dev/sda4              isize=512    agcount=4, agsize=596096 blks
-	 =                       sectsz=512   attr=2, projid32bit=1
-	 =                       crc=1        finobt=1, sparse=1, rmapbt=1
-	 =                       reflink=1    bigtime=1 inobtcount=1 nrext64=1
-	 =                       exchange=0  
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=1
+         =                       reflink=1    bigtime=1 inobtcount=1 nrext64=1
+         =                       exchange=0  
 data     =                       bsize=4096   blocks=2384384, imaxpct=25
-	 =                       sunit=0      swidth=0 blks
+         =                       sunit=0      swidth=0 blks
 naming   =version 2              bsize=4096   ascii-ci=0, ftype=1, parent=0
 log      =internal log           bsize=4096   blocks=16384, version=2
-	 =                       sectsz=512   sunit=0 blks, lazy-count=1
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
 realtime =none                   extsz=4096   blocks=0, rtextents=0
 Discarding blocks...Done.
-
+soukup@localhost:~$ mkdir /opt/assignment_data
+mkdir: cannot create directory ‘/opt/assignment_data’: Permission denied
 soukup@localhost:~$ sudo mkdir /opt/assignment_data
 soukup@localhost:~$ sudo mount /dev/sda4 /opt/assignment_data
 soukup@localhost:~$ df -h /opt/assignment_data
 Filesystem      Size  Used Avail Use% Mounted on
 /dev/sda4       9.1G  210M  8.9G   3% /opt/assignment_data
-
 soukup@localhost:~$ lsblk /dev/sda4
 NAME MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda4   8:4    0  9.1G  0 part /opt/assignment_data
-```
 
-**3. In most UNIX systems, there are seven types of files defined. What are these? Use the file command to display the information of a few files. In which of the seven categories do these files belong?**
-
-**Seven types:** Regular files, directories, character devices, block devices, local domain sockets, named pipes (FIFO), symbolic links.
-
-**Commands used:**
-
-```bash
-ls -ld /etc/passwd /etc /dev/sda4 /dev/tty
-```
-
-**Categorization:**
-
-- `/etc/passwd`: regular file (`-`).
-- `/etc`: directory (`d`).
-- `/dev/sda4`: block device (`b`).
-- `/dev/tty`: character device (`c`).
-
-**4. Hard links vs. symbolic links**
-
-**Commands used:**
-
-```bash
+Task4: Links
 soukup@localhost:/opt/assignment_data$ sudo -i
+[sudo] password for soukup: 
 root@localhost:~# cd /opt/assignment_data/
 root@localhost:/opt/assignment_data# ls -la
 total 0
@@ -119,39 +117,14 @@ root@localhost:/opt/assignment_data/as1_link_test# rm original.txt
 rm: remove regular file 'original.txt'? y
 root@localhost:/opt/assignment_data/as1_link_test# ls -li
 total 4
-132 -rw-r--r--. 2 root root 27 Feb  2 12:39 hardlink_file
+132 -rw-r--r--. 1 root root 27 Feb  2 12:39 hardlink_file
 133 lrwxrwxrwx. 1 root root 12 Feb  2 12:39 softlink_file -> original.txt
 root@localhost:/opt/assignment_data/as1_link_test# cat hardlink_file 
 This is the original text.
 root@localhost:/opt/assignment_data/as1_link_test# cat softlink_file 
-```
+cat: softlink_file: No such file or directory
 
-**Result and explanation:**
-
-- Hard link still works because it references the same inode (data).
-- Soft link is broken because it references a filename that no longer exists.
-
-**Screenshot:**
-
-![link-tests](link-tests.png)
-
----
-
-## Task 2: File attributes and permissions
-
-**1. In the traditional Linux/UNIX filesystem model, every file comes bundled with a set of 16 bits. What are these bits, and why are they needed? Explain.**
-
-The 16 bits include 9 permission bits (rwx for user, group, others), 3 special mode bits (SUID, SGID, sticky bit), and 4 bits for file type. They define both access control and the file's type in the filesystem.
-
-**2. The nine permission bits are often represented using octal numbers. Explain what these are, and how the permissions bits 110 100 101 can be represented using octals. What permissions does a file with the octal value 745 have?**
-
-`110 100 101` in octal is **645**. Octal **745** corresponds to `rwxr--r-x` (user: rwx, group: r, others: rx).
-
-**3. Chmod commands**
-
-**Commands used:**
-
-```bash
+Task 2-3: chmod
 root@localhost:/opt/assignment_data# mkdir file_permissions
 root@localhost:/opt/assignment_data# cd file_permissions/
 root@localhost:/opt/assignment_data/file_permissions# exit
@@ -163,7 +136,9 @@ drwxr-xr-x. 3 root root 29 Feb  2 12:29 ..
 drwxr-xr-x. 2 root root  6 Feb  2 12:47 file_permissions
 soukup@localhost:/opt/assignment_data$ cd file_permissions/
 soukup@localhost:/opt/assignment_data/file_permissions$ sudo touch file_mnemonic.txt
+[sudo] password for soukup: 
 soukup@localhost:/opt/assignment_data/file_permissions$ chmod u=rw,g=rx,o=rx file_mnemonic.txt 
+chmod: changing permissions of 'file_mnemonic.txt': Operation not permitted
 soukup@localhost:/opt/assignment_data/file_permissions$ sudo chmod u=rw,g=rx,o=rx file_mnemonic.txt 
 soukup@localhost:/opt/assignment_data/file_permissions$ ls -la
 total 0
@@ -180,23 +155,8 @@ drwxr-xr-x. 2 root root 53 Feb  2 12:50 .
 drwxr-xr-x. 3 root root 30 Feb  2 12:47 ..
 -rw-r-xr-x. 1 root root  0 Feb  2 12:48 file_mnemonic.txt
 -rw-r-xr-x. 1 root root  0 Feb  2 12:50 file_octal.txt
-```
 
-**Why octal can be preferred:** It is compact and sets all permission bits explicitly in one command.
-
----
-
-## Part 2 - Software installation and management
-
-### Task 3: Package management systems and lower level package management
-
-**1. Definition:** A package management system automates software installation and tracking. AlmaLinux uses the **.rpm** format.
-
-**2. RPM operations**
-
-**Commands and output:**
-
-```bash
+Part 2 - Task 3: packages
 rpm -qa
 libgcc-14.3.1-2.1.el10.alma.1.x86_64
 fonts-filesystem-2.0.5-18.el10.noarch
@@ -232,7 +192,6 @@ python3-perf-6.12.0-124.28.1.el10_1.x86_64
 podman-5.6.0-11.el10_1.alma.1.x86_64
 net-snmp-libs-5.9.4-15.el10_1.2.x86_64
 kernel-headers-6.12.0-124.28.1.el10_1.x86_64
-
 soukup@localhost:/opt/assignment_data/file_permissions$ rpm -qa | wc -l
 1289
 soukup@localhost:/opt/assignment_data/file_permissions$ rpm -q --requires bash
@@ -261,41 +220,30 @@ rpmlib(FileDigests) <= 4.6.0-1
 rpmlib(PayloadFilesHavePrefix) <= 4.0-1
 rpmlib(PayloadIsZstd) <= 5.4.18-1
 rtld(GNU_HASH)
-```
 
-**Result of installing with rpm:** The install failed due to missing dependencies. rpm does not resolve or download dependencies automatically.
-
-### Task 4: High-level package management
-
-**1. DNF system:** DNF (Dandified YUM) locates software in repositories and automatically resolves dependencies.
-
-**2. Repository:** A storage location for software packages (remote or local).
-
-**3. Install OpenVPN via DNF (interactive installer output):**
-
-```bash
+2): OpenVPN Install
 Welcome to this OpenVPN road warrior installer!
 
 This server is behind NAT. What is the public IPv4 address or hostname?
 Public IPv4 address / hostname [158.37.32.175]: 
 
 Which protocol should OpenVPN use?
-	 1) UDP (recommended)
-	 2) TCP
+   1) UDP (recommended)
+   2) TCP
 Protocol [1]: 
 
 What port should OpenVPN listen on?
 Port [1194]: 
 
 Select a DNS server for the clients:
-	 1) Default system resolvers
-	 2) Google
-	 3) 1.1.1.1
-	 4) OpenDNS
-	 5) Quad9
-	 6) Gcore
-	 7) AdGuard
-	 8) Specify custom resolvers
+   1) Default system resolvers
+   2) Google
+   3) 1.1.1.1
+   4) OpenDNS
+   5) Quad9
+   6) Gcore
+   7) AdGuard
+   8) Specify custom resolvers
 DNS server [1]: 
 
 Enter a name for the first client:
@@ -332,18 +280,18 @@ Transaction check succeeded.
 Running transaction test
 Transaction test succeeded.
 Running transaction
-	Preparing        :                                                                                             1/1 
-	Installing       : selinux-policy-targeted-extra-42.1.7-1.el10.noarch                                          1/3 
-	Installing       : selinux-policy-extra-42.1.7-1.el10.noarch                                                   2/3 
-	Installing       : epel-release-10-6.el10.noarch                                                               3/3 
-	Running scriptlet: epel-release-10-6.el10.noarch                                                               3/3 
+  Preparing        :                                                                                             1/1 
+  Installing       : selinux-policy-targeted-extra-42.1.7-1.el10.noarch                                          1/3 
+  Installing       : selinux-policy-extra-42.1.7-1.el10.noarch                                                   2/3 
+  Installing       : epel-release-10-6.el10.noarch                                                               3/3 
+  Running scriptlet: epel-release-10-6.el10.noarch                                                               3/3 
 Many EPEL packages require the CodeReady Builder (CRB) repository.
 It is recommended that you run /usr/bin/crb enable to enable the CRB repository.
 
 
 Installed:
-	epel-release-10-6.el10.noarch                                 selinux-policy-extra-42.1.7-1.el10.noarch           
-	selinux-policy-targeted-extra-42.1.7-1.el10.noarch           
+  epel-release-10-6.el10.noarch                                 selinux-policy-extra-42.1.7-1.el10.noarch           
+  selinux-policy-targeted-extra-42.1.7-1.el10.noarch           
 
 Complete!
 Extra Packages for Enterprise Linux 10 - x86_64                                      3.8 MB/s | 5.6 MB     00:01    
@@ -382,16 +330,17 @@ Transaction check succeeded.
 Running transaction test
 Transaction test succeeded.
 Running transaction
-	Preparing        :                                                                                             1/1 
-	Installing       : pkcs11-helper-1.30.0-2.el10_0.x86_64                                                        1/2 
-	Running scriptlet: openvpn-2.7_rc5-1.el10_1.x86_64                                                             2/2 
-	Installing       : openvpn-2.7_rc5-1.el10_1.x86_64                                                             2/2 
-	Running scriptlet: openvpn-2.7_rc5-1.el10_1.x86_64                                                             2/2 
+  Preparing        :                                                                                             1/1 
+  Installing       : pkcs11-helper-1.30.0-2.el10_0.x86_64                                                        1/2 
+  Running scriptlet: openvpn-2.7_rc5-1.el10_1.x86_64                                                             2/2 
+  Installing       : openvpn-2.7_rc5-1.el10_1.x86_64                                                             2/2 
+  Running scriptlet: openvpn-2.7_rc5-1.el10_1.x86_64                                                             2/2 
 
 Installed:
-	openvpn-2.7_rc5-1.el10_1.x86_64                        pkcs11-helper-1.30.0-2.el10_0.x86_64                       
+  openvpn-2.7_rc5-1.el10_1.x86_64                        pkcs11-helper-1.30.0-2.el10_0.x86_64                       
 
 Complete!
+tar: Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.com.apple.metadata:kMDItemTextContentLanguage'
 
 Notice
 ------
@@ -508,13 +457,8 @@ Finished!
 
 The client configuration is available in: /opt/assignment_data/jan_soukup.ovpn
 New clients can be added by running this script again.
-```
-
-**DNF install commands and output:**
 
 Part 2 - Task 4: High level package managment
-
-```bash
 soukup@localhost:/opt/assignment_data$ sudo dnf install epel-release
 Last metadata expiration check: 0:11:05 ago on Mon 02 Feb 2026 01:08:55 PM CET.
 Package epel-release-10-6.el10.noarch is already installed.
@@ -540,14 +484,14 @@ Transaction check succeeded.
 Running transaction test
 Transaction test succeeded.
 Running transaction
-	Preparing        :                                                                                             1/1 
-	Upgrading        : epel-release-10-7.el10_1.noarch                                                             1/2 
-	Running scriptlet: epel-release-10-7.el10_1.noarch                                                             1/2 
-	Cleanup          : epel-release-10-6.el10.noarch                                                               2/2 
-	Running scriptlet: epel-release-10-6.el10.noarch                                                               2/2 
+  Preparing        :                                                                                             1/1 
+  Upgrading        : epel-release-10-7.el10_1.noarch                                                             1/2 
+  Running scriptlet: epel-release-10-7.el10_1.noarch                                                             1/2 
+  Cleanup          : epel-release-10-6.el10.noarch                                                               2/2 
+  Running scriptlet: epel-release-10-6.el10.noarch                                                               2/2 
 
 Upgraded:
-	epel-release-10-7.el10_1.noarch                                                                                    
+  epel-release-10-7.el10_1.noarch                                                                                    
 
 Complete!
 soukup@localhost:/opt/assignment_data$ sudo dnf install openvpn
@@ -556,112 +500,23 @@ Package openvpn-2.7_rc5-1.el10_1.x86_64 is already installed.
 Dependencies resolved.
 Nothing to do.
 Complete!
-```
 
-**Screenshot:**
-
-![package-install](package-install.png)
-
-**4. Remove and update:**
-
-```bash
-sudo dnf remove openvpn
-sudo dnf update
-```
-
----
-
-## Part 3 - Systemd
-
-### Task 1: Systemd targets and units
-
-**1. ctrl-alt-del.target**
-
-**a) Current behavior:** Points to `reboot.target`, causing an immediate restart when Ctrl+Alt+Del is pressed.
-
-**b) Modification:**
-
-```bash
+Part 3: systemd
 soukup@localhost:/opt/assignment_data$ ls -l /usr/lib/systemd/system/ctrl-alt-del.target 
 lrwxrwxrwx. 1 root root 13 Aug 17 02:00 /usr/lib/systemd/system/ctrl-alt-del.target -> reboot.target
 soukup@localhost:/opt/assignment_data$ sudo ln -sf /usr/lib/systemd/system/halt.target /usr/lib/systemd/system/ctrl-alt-del.target 
 soukup@localhost:/usr$ sudo systemctl daemon-reload 
-```
-
-**2. Default target**
-
-**Check current default:**
-
-```bash
 soukup@localhost:/usr$ systemctl get-default 
 graphical.target
-```
-
-**Change to multi-user:**
-
-```bash
 soukup@localhost:/usr$ sudo systemctl set-default multi-user.target 
 Removed '/etc/systemd/system/default.target'.
 Created symlink '/etc/systemd/system/default.target' → '/usr/lib/systemd/system/multi-user.target'.
-```
 
-**Switch back to GUI:**
-
-```bash
-sudo systemctl isolate graphical.target
-```
-
-**3. Emergency mode**
-
-**Action:** Remounted `/` as `rw` and created `/root/emergency_test.txt`.
-
+3)
 Used 'E' to go int oedit mode on boot
+added systemd.user=emergency.target
+remounted using read write privilages - mount -o remount,rw /
+created file in /root - touch /root/emergency_test.txt - stayed at the file system
+4)
+TODO fstab
 
-Added `systemd.user=emergency.target` OR `emergency` (shortcut)
-
-Remounted using read write privilages:
-
-```bash 
-mount -o remount,rw /
-```
-
-created file in /root:
-
-```bash
-touch /root/emergency_test.txt - stayed at the file system
-```
-
-**4. Fstab recovery**
-
-**Action:** Modified `/etc/fstab` with a typo, rebooted into emergency mode, and corrected the file to restore boot functionality.
-
-**Screenshots:**
-
-![Part3-task4-1](Part3-task4-1.png)
-
-![Part3-task4-2](Part3-task4-2.png)
-
-![Part3-task4-emergency-boot](Part3-task4-emergency-boot.jpg)
-
-**5. Systemd mount unit**
-
-**Unit file:** `/etc/systemd/system/home-user-ram.mount`
-
-**Activation and check:**
-
-```bash
-sudo systemctl start home-user-ram.mount
-mount | grep ram
-```
-
-**Screenshots:**
-
-![Part3-task5-1.png](Part3-task5-1.png)
-
-![Part3-task5-2.png](Part3-task5-2.png)
-
-**How to boot into emergency CLI:**
-
-```bash
-systemd.unit=emergency.target
-```
