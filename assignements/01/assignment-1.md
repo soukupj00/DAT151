@@ -22,7 +22,7 @@ Note: After monday's tutorial we shortened command line output texts so that the
 
 **2. What is a mount point?**
 
-**Definition:** A mount point is a directory in the existing filesystem hierarchy where a new filesystem (like a partition) is attached to make it accessible.
+**Definition:** A mount point is a directory in the existing filesystem hierarchy where a new filesystem (like a partition) is attached to make it accessible. It acts as an acces node, allowing the operating system to treat external storage as subdirectory
 
 **Command line instructions:**
 
@@ -69,7 +69,14 @@ sda4   8:4    0  9.1G  0 part /opt/assignment_data
 
 **3. In most UNIX systems, there are seven types of files defined. What are these? Use the file command to display the information of a few files. In which of the seven categories do these files belong?**
 
-**Seven types:** Regular files, directories, character devices, block devices, local domain sockets, named pipes (FIFO), symbolic links.
+**Seven types:** 
+Regular files (-) - Data files, executable programs, text files, or images
+Directories (d) - Files that act as containers for other files and folder structures
+Character devices (c) - Device files that handle data character-by-Character, such as terminals (/dev/tty) or printers.
+Block devices (b) -Device files that handle data in blocks, typical for storage devices like hard drives (/dev/sda).
+Local domain sockets(s) - Files used for inter-process communication, often over a network
+Named pipes (FIFO)(p) - Used for inter-process communication, allowing data to flow from one process to another
+Symbolic links (l) -Files that point to another file or directory (shortcuts)
 
 **Commands used:**
 
