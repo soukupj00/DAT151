@@ -174,11 +174,15 @@ drwxr-xr-x. 3 root root 30 Feb  2 12:47 ..
 
 ### Task 3: Package management systems and lower level package management
 
-**1. Definition:** A package management system automates software installation and tracking. AlmaLinux uses the **.rpm** format.
+**1. What is a package management system, and why do we need one? What is the package format used by the package management system on your machine?:**
+
+A package management system that automates software installation, updates and removal of software. It also simplifies the distribution of software.
+
+AlmaLinux uses the **.rpm** format.
 
 **2. RPM operations**
 
-For this task we forgot to capture a screenshot of the command line and save all of the output, however we both saw the behaviour of rpm installation.
+For this task we forgot to capture a screenshot of the command line and save all of the output, however we both saw the behaviour of rpm installation and its problems.
 
 **Commands and output:**
 
