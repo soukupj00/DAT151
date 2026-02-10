@@ -69,14 +69,15 @@ sda4   8:4    0  9.1G  0 part /opt/assignment_data
 
 **3. In most UNIX systems, there are seven types of files defined. What are these? Use the file command to display the information of a few files. In which of the seven categories do these files belong?**
 
-**Seven types:** 
-Regular files (-) - Data files, executable programs, text files, or images
-Directories (d) - Files that act as containers for other files and folder structures
-Character devices (c) - Device files that handle data character-by-Character, such as terminals (/dev/tty) or printers.
-Block devices (b) -Device files that handle data in blocks, typical for storage devices like hard drives (/dev/sda).
-Local domain sockets(s) - Files used for inter-process communication, often over a network
-Named pipes (FIFO)(p) - Used for inter-process communication, allowing data to flow from one process to another
-Symbolic links (l) -Files that point to another file or directory (shortcuts)
+**Seven types:**
+
+* Regular files (-) - Data files, executable programs, text files, or images
+* Directories (d) - Files that act as containers for other files and folder structures
+* Character devices (c) - Device files that handle data character-by-Character, such as terminals (/dev/tty) or printers.
+* Block devices (b) -Device files that handle data in blocks, typical for storage devices like hard drives (/dev/sda).
+* Local domain sockets(s) - Files used for inter-process communication, often over a network
+* Named pipes (FIFO)(p) - Used for inter-process communication, allowing data to flow from one process to another
+* Symbolic links (l) -Files that point to another file or directory (shortcuts)
 
 **Commands used:**
 
@@ -225,250 +226,11 @@ rtld(GNU_HASH)
 
 **1. DNF system:** DNF (Dandified YUM) locates software in repositories and automatically resolves dependencies.
 
-**2. Repository:** A storage location for software packages (remote or local).
+**2. What is a software repository? If you are using dnf as your high-level package management system, add the epel software repository to your system. If you are using something else try a diﬀerent repository of choice.:**
 
-**3. Install OpenVPN via DNF (interactive installer output):**
+Software repository is a storage location for software packages (remote or local).
 
-```bash
-Welcome to this OpenVPN road warrior installer!
-
-This server is behind NAT. What is the public IPv4 address or hostname?
-Public IPv4 address / hostname [158.37.32.175]: 
-
-Which protocol should OpenVPN use?
-	 1) UDP (recommended)
-	 2) TCP
-Protocol [1]: 
-
-What port should OpenVPN listen on?
-Port [1194]: 
-
-Select a DNS server for the clients:
-	 1) Default system resolvers
-	 2) Google
-	 3) 1.1.1.1
-	 4) OpenDNS
-	 5) Quad9
-	 6) Gcore
-	 7) AdGuard
-	 8) Specify custom resolvers
-DNS server [1]: 
-
-Enter a name for the first client:
-Name [client]: jan_soukup
-
-OpenVPN installation is ready to begin.
-Press any key to continue...
-Last metadata expiration check: 0:17:02 ago on Mon 02 Feb 2026 12:51:49 PM CET.
-Dependencies resolved.
-=====================================================================================================================
- Package                                    Architecture        Version                    Repository           Size
-=====================================================================================================================
-Installing:
- epel-release                               noarch              10-6.el10                  extras               18 k
-Installing dependencies:
- selinux-policy-targeted-extra              noarch              42.1.7-1.el10              crb                 711 k
-Installing weak dependencies:
- selinux-policy-extra                       noarch              42.1.7-1.el10              crb                  33 k
-
-Transaction Summary
-=====================================================================================================================
-Install  3 Packages
-
-Total download size: 762 k
-Installed size: 822 k
-Downloading Packages:
-(1/3): epel-release-10-6.el10.noarch.rpm                                             357 kB/s |  18 kB     00:00    
-(2/3): selinux-policy-extra-42.1.7-1.el10.noarch.rpm                                 451 kB/s |  33 kB     00:00    
-(3/3): selinux-policy-targeted-extra-42.1.7-1.el10.noarch.rpm                        6.9 MB/s | 711 kB     00:00    
----------------------------------------------------------------------------------------------------------------------
-Total                                                                                956 kB/s | 762 kB     00:00     
-Running transaction check
-Transaction check succeeded.
-Running transaction test
-Transaction test succeeded.
-Running transaction
-	Preparing        :                                                                                             1/1 
-	Installing       : selinux-policy-targeted-extra-42.1.7-1.el10.noarch                                          1/3 
-	Installing       : selinux-policy-extra-42.1.7-1.el10.noarch                                                   2/3 
-	Installing       : epel-release-10-6.el10.noarch                                                               3/3 
-	Running scriptlet: epel-release-10-6.el10.noarch                                                               3/3 
-Many EPEL packages require the CodeReady Builder (CRB) repository.
-It is recommended that you run /usr/bin/crb enable to enable the CRB repository.
-
-
-Installed:
-	epel-release-10-6.el10.noarch                                 selinux-policy-extra-42.1.7-1.el10.noarch           
-	selinux-policy-targeted-extra-42.1.7-1.el10.noarch           
-
-Complete!
-Extra Packages for Enterprise Linux 10 - x86_64                                      3.8 MB/s | 5.6 MB     00:01    
-Last metadata expiration check: 0:00:01 ago on Mon 02 Feb 2026 01:08:55 PM CET.
-Package openssl-1:3.5.1-7.el10_1.alma.1.x86_64 is already installed.
-Package ca-certificates-2025.2.80_v9.0.305-102.el10_1.noarch is already installed.
-Package tar-2:1.35-9.el10_1.x86_64 is already installed.
-Dependencies resolved.
-=====================================================================================================================
- Package                       Architecture           Version                             Repository            Size
-=====================================================================================================================
-Installing:
- openvpn                       x86_64                 2.7_rc5-1.el10_1                    epel                 695 k
-Installing dependencies:
- pkcs11-helper                 x86_64                 1.30.0-2.el10_0                     epel                  67 k
-
-Transaction Summary
-=====================================================================================================================
-Install  2 Packages
-
-Total download size: 762 k
-Installed size: 1.9 M
-Downloading Packages:
-(1/2): pkcs11-helper-1.30.0-2.el10_0.x86_64.rpm                                      391 kB/s |  67 kB     00:00    
-(2/2): openvpn-2.7_rc5-1.el10_1.x86_64.rpm                                           2.7 MB/s | 695 kB     00:00    
----------------------------------------------------------------------------------------------------------------------
-Total                                                                                1.9 MB/s | 762 kB     00:00     
-Extra Packages for Enterprise Linux 10 - x86_64                                      1.6 MB/s | 1.6 kB     00:00    
-Importing GPG key 0xE37ED158:
- Userid     : "Fedora (epel10) <epel@fedoraproject.org>"
- Fingerprint: 7D8D 15CB FC4E 6268 8591 FB26 33D9 8517 E37E D158
- From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-10
-Key imported successfully
-Running transaction check
-Transaction check succeeded.
-Running transaction test
-Transaction test succeeded.
-Running transaction
-	Preparing        :                                                                                             1/1 
-	Installing       : pkcs11-helper-1.30.0-2.el10_0.x86_64                                                        1/2 
-	Running scriptlet: openvpn-2.7_rc5-1.el10_1.x86_64                                                             2/2 
-	Installing       : openvpn-2.7_rc5-1.el10_1.x86_64                                                             2/2 
-	Running scriptlet: openvpn-2.7_rc5-1.el10_1.x86_64                                                             2/2 
-
-Installed:
-	openvpn-2.7_rc5-1.el10_1.x86_64                        pkcs11-helper-1.30.0-2.el10_0.x86_64                       
-
-Complete!
-
-Notice
-------
-'init-pki' complete; you may now create a CA or requests.
-
-Your newly created PKI dir is:
-* /etc/openvpn/server/easy-rsa/pki
-
-.+......+..+.+............+..+++++++++++++++++++++++++++++++++++++++*.......+.........+......+.....+++++++++++++++++++++++++++++++++++++++*...+......+............+...+........+..........+............+............+..+....+.........+...+........+.+.....+.+..+.............+...+.....+.+...+..+...+...+..........+.....+.........+.+..+...+...............+....+..............+......+..........+.....+.+............+..................+...+..+...+.......+.....+.......+..+...+......+.+........+...+...+.......+...+.....+.+........+.......+...........+....+...+..+.+..............+....+..+.......+..+...+.............+..+......+....+..+...+...............+.......+......+..+................+..+.......+..+..........+...............+...+...+.....+....+.....+...+......+..........+..+.........+...+......+....+..+....+..............+............+.....................+...+.+...+......+.....+......+...+.+......+...+.....+...+....+...+......+..+..........+...+.........+...............+........+.......+...+..+......+......+.+..+.+...........................+...+.........+.....+...+..................................+........+............+.+...+......+......+.....+.......+..+....+.........+......+.........+..+....+..+...+................+........+.+.....+...............+.+...+.....+......++++++
-..+......+..+++++++++++++++++++++++++++++++++++++++*.......+..+....+..+....+.........+..+.............+.........+++++++++++++++++++++++++++++++++++++++*..+...+.........+.......+.....+.+...............+..............+...+...+...+.+..................+.....+.+.....+.......+........+.+...+...........+..........++++++
-
-Notice
-------
-CA creation complete. Your new CA certificate is at:
-* /etc/openvpn/server/easy-rsa/pki/ca.crt
-
-Build-ca completed successfully.
-
-
-Notice
-------
-TLS-CRYPT Key generated at:
-* /etc/openvpn/server/easy-rsa/pki/private/easyrsa-tls.key
-
-If this file is changed then it MUST be redistributed to ALL servers
-AND clients, to be in effect. Do NOT change this existing file.
-
-...............+....+.....+...+....+...+..+.+...+.....+....+..+++++++++++++++++++++++++++++++++++++++*......+++++++++++++++++++++++++++++++++++++++*.......+........+.......+...+...+............+...........+......+...+...+...............+....+......+..+.+..+...+......++++++
-...+...........+.+++++++++++++++++++++++++++++++++++++++*.+.....+++++++++++++++++++++++++++++++++++++++*........+...........+....+......+.....+....+......+......+...+.....+...+...+.......+..+.+..+............+.+.....+......+....+......+........+............+......+.......+...+..+..........+...........+.+......+......................................+....+.....+...++++++
------
-
-Notice
-------
-Private-Key and Public-Certificate-Request files created.
-Your files are:
-* req: /etc/openvpn/server/easy-rsa/pki/reqs/server.req
-* key: /etc/openvpn/server/easy-rsa/pki/private/server.key
-
-Using configuration from /etc/openvpn/server/easy-rsa/pki/70109beb/temp.02
-Check that the request matches the signature
-Signature ok
-The Subject's Distinguished Name is as follows
-commonName            :ASN.1 12:'server'
-Certificate is to be certified until Jan 31 12:09:00 2036 GMT (3650 days)
-
-Write out database with 1 new entries
-Database updated
-
-Notice
-------
-Inline file created:
-* /etc/openvpn/server/easy-rsa/pki/inline/private/server.inline
-
-
-Notice
-------
-Certificate created at:
-* /etc/openvpn/server/easy-rsa/pki/issued/server.crt
-
-.....+....+..+.......+...+..+.......+........+..........+............+.....+.+...+++++++++++++++++++++++++++++++++++++++*.....+++++++++++++++++++++++++++++++++++++++*...+..............+......+.......+...............+........+.+...+..+......+.......+..+.+.....+...+....+...+.........+........+.+..+.............+..+.......+......+......+......+...+.........+..+.........+.+.....+....+..+.........+....+...........+.........+..........+..+.............+.....+.......+.....+...+............+.......+...........+..........+..+....+...+........+............+......+.+........+.............+.........+........+...+....+.........+.........+......+..+............+......+.+......+.........+...+.....+......+......+.........+...............+...................+..+.+...+...........+.............+...+..+..........+..+.........+......+.............+..+.+..+......+.+...+...+............+...+..+...+..................+....+...+........+....+..+.+...+.....+..........+.....+...................+...+..............+....+..+...............+...................+...............+......+..+......+....+..+.............+...+.....+...+......+...+.+.........+..+......+....+........+.+.........++++++
-.......+.......+...+.....+.............+..+......+...............+......+....+..+..........+.........+...+..+...+.+.....+.......+...+..+++++++++++++++++++++++++++++++++++++++*.....+.............+++++++++++++++++++++++++++++++++++++++*.......+....+......+..+.......+......+.........+...+...+.....+...............+...+............+....+.........+.....................+.....+.+........+......+....+......+...+.....+...+....+.....+.........+....+..+......+.........+..........+...+.....+.+......+.....+.+..+................+..+....+...+..................+..................+..+....+........+...+....+......+.....+.........+.........+..........+......+...+..+.+..+......+.+......+...+.....+.......+..+...+....+..............+....+.....+...+.........+...+.+...............+.....++++++
------
-
-Notice
-------
-Private-Key and Public-Certificate-Request files created.
-Your files are:
-* req: /etc/openvpn/server/easy-rsa/pki/reqs/jan_soukup.req
-* key: /etc/openvpn/server/easy-rsa/pki/private/jan_soukup.key
-
-Using configuration from /etc/openvpn/server/easy-rsa/pki/10610a9e/temp.02
-Check that the request matches the signature
-Signature ok
-The Subject's Distinguished Name is as follows
-commonName            :ASN.1 12:'jan_soukup'
-Certificate is to be certified until Jan 31 12:09:00 2036 GMT (3650 days)
-
-Write out database with 1 new entries
-Database updated
-
-Notice
-------
-Inline file created:
-* /etc/openvpn/server/easy-rsa/pki/inline/private/jan_soukup.inline
-
-
-Notice
-------
-Certificate created at:
-* /etc/openvpn/server/easy-rsa/pki/issued/jan_soukup.crt
-
-Using configuration from /etc/openvpn/server/easy-rsa/pki/dbccc426/temp.00
-
-Notice
-------
-An updated CRL DER copy has been created:
-* /etc/openvpn/server/easy-rsa/pki/crl.der
-
-An updated CRL has been created:
-* /etc/openvpn/server/easy-rsa/pki/crl.pem
-
-IMPORTANT: When the CRL expires, an OpenVPN Server which uses a
-CRL will reject ALL new connections, until the CRL is replaced.
-
-success
-success
-success
-success
-success
-success
-Created symlink '/etc/systemd/system/multi-user.target.wants/openvpn-server@server.service' → '/usr/lib/systemd/system/openvpn-server@.service'.
-
-Finished!
-
-The client configuration is available in: /opt/assignment_data/jan_soukup.ovpn
-New clients can be added by running this script again.
-```
-
-**DNF install commands and output:**
-
-Part 2 - Task 4: High level package managment
+**Command output:**
 
 ```bash
 soukup@localhost:/opt/assignment_data$ sudo dnf install epel-release
@@ -518,10 +280,26 @@ Complete!
 
 ![package-install](package-install.png)
 
-**4. Remove and update:**
+**3. Try using dnf to install the openvpn package. Does this diﬀer in any way from task 3? If it installs, remove the package afterwards.:**
+
+Using the `dnf` to install the OpenVPN package also installs all of the required dependencies as well. This means we do not have to install them ourselves and the `dnf` package manager also pulls the correct versions of the identified dependencies.
+
+We also tried the interactive OpenVPN installer that also automatically pulls all needed dependencies.
 
 ```bash
+Welcome to this OpenVPN road warrior installer!
+...
+Finished!
+
+The client configuration is available in: /opt/assignment_data/jan_soukup.ovpn
+New clients can be added by running this script again.
+
 sudo dnf remove openvpn
+```
+
+**4. Use dnf to update the packages on your system:**
+
+```bash
 sudo dnf update
 ```
 
