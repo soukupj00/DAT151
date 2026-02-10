@@ -1,8 +1,10 @@
 # DAT151: Assignment 1 Report
 
-**Group Members:** Soukup Jan
+**Group Members:** Soukup Jan, Fabienne Feilke
 
 **Date:** February 9, 2026
+
+Note: After monday's tutorial we shortened command line output texts so that the report isn't that long.
 
 ---
 
@@ -22,7 +24,7 @@
 
 **Definition:** A mount point is a directory in the existing filesystem hierarchy where a new filesystem (like a partition) is attached to make it accessible. It acts as an acces node, allowing the operating system to treat external storage as subdirectory
 
-**Command execution (partition + mount):**
+**Command line instructions:**
 
 ```bash
 soukup@localhost:~$ sudo parted -s /dev/sda unit s print free
@@ -95,13 +97,6 @@ ls -ld /etc/passwd /etc /dev/sda4 /dev/tty
 
 ```bash
 soukup@localhost:/opt/assignment_data$ sudo -i
-root@localhost:~# cd /opt/assignment_data/
-root@localhost:/opt/assignment_data# ls -la
-total 0
-drwxr-xr-x. 2 root root  6 Feb  2 12:29 .
-drwxr-xr-x. 3 root root 29 Feb  2 12:29 ..
-root@localhost:/opt/assignment_data# mkdir as1_link_test
-root@localhost:/opt/assignment_data# cd as1_link_test/
 root@localhost:/opt/assignment_data/as1_link_test# echo "This is the original text." > original.txt
 root@localhost:/opt/assignment_data/as1_link_test# ls -la
 total 4
@@ -110,13 +105,6 @@ drwxr-xr-x. 3 root root 27 Feb  2 12:38 ..
 -rw-r--r--. 1 root root 27 Feb  2 12:39 original.txt
 root@localhost:/opt/assignment_data/as1_link_test# ln original.txt hardlink_file
 root@localhost:/opt/assignment_data/as1_link_test# ln -s original.txt softlink_file
-root@localhost:/opt/assignment_data/as1_link_test# ls -la
-total 8
-drwxr-xr-x. 2 root root 68 Feb  2 12:39 .
-drwxr-xr-x. 3 root root 27 Feb  2 12:38 ..
--rw-r--r--. 2 root root 27 Feb  2 12:39 hardlink_file
--rw-r--r--. 2 root root 27 Feb  2 12:39 original.txt
-lrwxrwxrwx. 1 root root 12 Feb  2 12:39 softlink_file -> original.txt
 root@localhost:/opt/assignment_data/as1_link_test# ls -li
 total 8
 132 -rw-r--r--. 2 root root 27 Feb  2 12:39 hardlink_file
@@ -131,12 +119,13 @@ total 4
 root@localhost:/opt/assignment_data/as1_link_test# cat hardlink_file 
 This is the original text.
 root@localhost:/opt/assignment_data/as1_link_test# cat softlink_file 
+cat: softlink_file: No such file or directory
 ```
 
-**Result and explanation:**
+**Explanation of the code above**
 
-- Hard link still works because it references the same inode (data).
-- Soft link is broken because it references a filename that no longer exists.
+- Hard link still works because it references the same inode - data.
+- Soft link is broken because it references a filename that has been deleted (does not exist).
 
 **Screenshot:**
 
@@ -148,7 +137,7 @@ root@localhost:/opt/assignment_data/as1_link_test# cat softlink_file
 
 **1. In the traditional Linux/UNIX filesystem model, every file comes bundled with a set of 16 bits. What are these bits, and why are they needed? Explain.**
 
-The 16 bits include 9 permission bits (rwx for user, group, others), 3 special mode bits (SUID, SGID, sticky bit), and 4 bits for file type. They define both access control and the file's type in the filesystem.
+The 16 bits include 9 permission bits (read/write/execute for user, group, others), 3 special mode bits (SUID, SGID, sticky bit), and 4 bits for file type. They define both access control and the file's type in the filesystem.
 
 **2. The nine permission bits are often represented using octal numbers. Explain what these are, and how the permissions bits 110 100 101 can be represented using octals. What permissions does a file with the octal value 745 have?**
 
@@ -156,30 +145,17 @@ The 16 bits include 9 permission bits (rwx for user, group, others), 3 special m
 
 **3. Chmod commands**
 
-**Commands used:**
+**Commands used** *(I created the folder using sudo, which is why i needed to use sudo in other commands as well)*:
 
 ```bash
-root@localhost:/opt/assignment_data# mkdir file_permissions
-root@localhost:/opt/assignment_data# cd file_permissions/
-root@localhost:/opt/assignment_data/file_permissions# exit
-logout
-soukup@localhost:/opt/assignment_data$ ls -la
-total 0
-drwxr-xr-x. 3 root root 30 Feb  2 12:47 .
-drwxr-xr-x. 3 root root 29 Feb  2 12:29 ..
-drwxr-xr-x. 2 root root  6 Feb  2 12:47 file_permissions
-soukup@localhost:/opt/assignment_data$ cd file_permissions/
 soukup@localhost:/opt/assignment_data/file_permissions$ sudo touch file_mnemonic.txt
-soukup@localhost:/opt/assignment_data/file_permissions$ chmod u=rw,g=rx,o=rx file_mnemonic.txt 
 soukup@localhost:/opt/assignment_data/file_permissions$ sudo chmod u=rw,g=rx,o=rx file_mnemonic.txt 
 soukup@localhost:/opt/assignment_data/file_permissions$ ls -la
 total 0
 drwxr-xr-x. 2 root root 31 Feb  2 12:48 .
 drwxr-xr-x. 3 root root 30 Feb  2 12:47 ..
 -rw-r-xr-x. 1 root root  0 Feb  2 12:48 file_mnemonic.txt
-soukup@localhost:/opt/assignment_data/file_permissions$ touch file_octal.txt
 soukup@localhost:/opt/assignment_data/file_permissions$ sudo touch file_octal.txt
-soukup@localhost:/opt/assignment_data/file_permissions$ chmod 655 file_octal.txt 
 soukup@localhost:/opt/assignment_data/file_permissions$ sudo chmod 655 file_octal.txt 
 soukup@localhost:/opt/assignment_data/file_permissions$ ls -la
 total 0
@@ -189,7 +165,7 @@ drwxr-xr-x. 3 root root 30 Feb  2 12:47 ..
 -rw-r-xr-x. 1 root root  0 Feb  2 12:50 file_octal.txt
 ```
 
-**Why octal can be preferred:** It is compact and sets all permission bits explicitly in one command. Furthermore it remuves ambiguity that can occur with case sensitivity
+**Why octal can be preferred:** It's easy to understand, fast to write, more compact compared to other options.
 
 ---
 
@@ -201,6 +177,8 @@ drwxr-xr-x. 3 root root 30 Feb  2 12:47 ..
 
 **2. RPM operations**
 
+For this task we forgot to capture a screenshot of the command line and save all of the output, however we both saw the behaviour of rpm installation.
+
 **Commands and output:**
 
 ```bash
@@ -209,36 +187,7 @@ libgcc-14.3.1-2.1.el10.alma.1.x86_64
 fonts-filesystem-2.0.5-18.el10.noarch
 ...
 emacs-29.4-12.el10.x86_64
-emacs-common-29.4-12.el10.x86_64
 mariadb-connector-c-config-3.4.4-1.el10.noarch
-mariadb-common-10.11.15-1.el10_1.noarch
-mariadb-connector-c-3.4.4-1.el10.x86_64
-perl-Sys-Hostname-1.25-512.2.el10_0.x86_64
-perl-DBD-MariaDB-1.23-10.el10.x86_64
-mariadb-errmsg-10.11.15-1.el10_1.noarch
-perl-File-Copy-2.41-512.2.el10_0.noarch
-mysql-selinux-1.0.14-1.el10_0.noarch
-mariadb-client-utils-10.11.15-1.el10_1.x86_64
-mariadb-backup-10.11.15-1.el10_1.x86_64
-mariadb-gssapi-server-10.11.15-1.el10_1.x86_64
-mariadb-server-utils-10.11.15-1.el10_1.x86_64
-mariadb-server-10.11.15-1.el10_1.x86_64
-mariadb-10.11.15-1.el10_1.x86_64
-kernel-modules-core-6.12.0-124.28.1.el10_1.x86_64
-kernel-core-6.12.0-124.28.1.el10_1.x86_64
-kernel-modules-6.12.0-124.28.1.el10_1.x86_64
-kernel-modules-extra-6.12.0-124.28.1.el10_1.x86_64
-kernel-tools-libs-6.12.0-124.28.1.el10_1.x86_64
-kernel-tools-6.12.0-124.28.1.el10_1.x86_64
-kernel-6.12.0-124.28.1.el10_1.x86_64
-microcode_ctl-20250812-1.20251111.1.el10_1.noarch
-libbrotli-1.1.0-7.el10_1.x86_64
-kernel-modules-extra-matched-6.12.0-124.28.1.el10_1.x86_64
-glib2-2.80.4-10.el10_1.12.x86_64
-python3-perf-6.12.0-124.28.1.el10_1.x86_64
-podman-5.6.0-11.el10_1.alma.1.x86_64
-net-snmp-libs-5.9.4-15.el10_1.2.x86_64
-kernel-headers-6.12.0-124.28.1.el10_1.x86_64
 
 soukup@localhost:/opt/assignment_data/file_permissions$ rpm -qa | wc -l
 1289
@@ -270,7 +219,7 @@ rpmlib(PayloadIsZstd) <= 5.4.18-1
 rtld(GNU_HASH)
 ```
 
-**Result of installing with rpm:** The install failed due to missing dependencies. rpm does not resolve or download dependencies automatically.
+**Result of installing with rpm:** The install failed due to missing dependencies, as rpm does not resolve or download dependencies automatically - we have to install them ourselves.
 
 ### Task 4: High-level package management
 
@@ -582,29 +531,40 @@ sudo dnf update
 
 ### Task 1: Systemd targets and units
 
-**1. ctrl-alt-del.target**
+**1. a) What is the current target that ctrl-alt-del.target points to, and what are the consequences?**
 
-**a) Current behavior:** Points to `reboot.target`, causing an immediate restart when Ctrl+Alt+Del is pressed.
+**a) Current target:** Points to `reboot.target`. This will restart the system on the button combination press.
 
-**b) Modification:**
+**Command line output:**
 
 ```bash
 soukup@localhost:/opt/assignment_data$ ls -l /usr/lib/systemd/system/ctrl-alt-del.target 
 lrwxrwxrwx. 1 root root 13 Aug 17 02:00 /usr/lib/systemd/system/ctrl-alt-del.target -> reboot.target
+```
+
+**b) Modify the ctrl-alt-del.target to halt the computer when Control+Alt+Del is pressed.**
+
+**b) Modification:** We created a symlink to the `halt.target` instead, which will halt the tartget - shutdown the PC instead.
+
+**Command line output:**
+
+```bash
 soukup@localhost:/opt/assignment_data$ sudo ln -sf /usr/lib/systemd/system/halt.target /usr/lib/systemd/system/ctrl-alt-del.target 
 soukup@localhost:/usr$ sudo systemctl daemon-reload 
 ```
 
-**2. Default target**
+**2. Set the systemd default.target to multi-user.target, then restart the computer.**
 
-**Check current default:**
+**Command line output:**
+
+*Check current default*
 
 ```bash
 soukup@localhost:/usr$ systemctl get-default 
 graphical.target
 ```
 
-**Change to multi-user:**
+*Change to multi-user:*
 
 ```bash
 soukup@localhost:/usr$ sudo systemctl set-default multi-user.target 
@@ -612,35 +572,26 @@ Removed '/etc/systemd/system/default.target'.
 Created symlink '/etc/systemd/system/default.target' → '/usr/lib/systemd/system/multi-user.target'.
 ```
 
-**Switch back to GUI:**
+After this step we restarted the PC, which then booted us in a terminal mode instead of GUI. After logging in with our credentials we then switched back to GUI with the following command:
 
 ```bash
 sudo systemctl isolate graphical.target
 ```
 
-**3. Emergency mode**
+**3. Reboot the computer, and boot into the emergency.target by modifying the kernel line of the Grub stanza for you system. Mount the root ﬁle system (/) rw, and create a ﬁle in the /root directory. Then restart the computer.**
 
-**Action:** Remounted `/` as `rw` and created `/root/emergency_test.txt`.
-
-Used 'E' to go int oedit mode on boot
-
-Added `systemd.user=emergency.target` OR `emergency` (shortcut)
-
-Remounted using read write privilages:
-
-```bash 
-mount -o remount,rw /
-```
-
-created file in /root:
+First we restarted the PC. On the boot sequence, we pressed 'E' to get into edit mode of the boot. We added a `systemd.user=emergency.target` - later we found out only writing `emergency` also works (shortcut). This booted us to terminal emergency mode. We then remounted `/` as `rw` and created `/root/emergency_test.txt` - this was done because we didn't have write privileges, so we needed to remount first before we could create/edit files. Output:
 
 ```bash
-touch /root/emergency_test.txt - stayed at the file system
+mount -o remount,rw /
+touch /root/emergency_test.txt
 ```
 
-**4. Fstab recovery**
+The file `/root/emergency_test.txt` stayed at the file system even after rebooting.
 
-**Action:** Modified `/etc/fstab` with a typo, rebooted into emergency mode, and corrected the file to restore boot functionality.
+**4. Only if the previous task was solved, modify the /boot stanza in the /etc/fstab ﬁle and use a wrong value.**
+
+We first made a copy of the `/etc/fstab` file. Then we changed one of the UUID letters to make it invalid, rebooted the PC which caused the boot to not finish. We again went to emergency mode, remounted and fixed the file (rewrote it with the copy of the original).
 
 **Screenshots:**
 
@@ -650,25 +601,10 @@ touch /root/emergency_test.txt - stayed at the file system
 
 ![Part3-task4-emergency-boot](Part3-task4-emergency-boot.jpg)
 
-**5. Systemd mount unit**
+**5. Create a directory ram below your home directory. Create a systemd mount unit that mounts a ramdisk on the ram directory.**
 
-**Unit file:** `/etc/systemd/system/home-user-ram.mount`
-
-**Activation and check:**
-
-```bash
-sudo systemctl start home-user-ram.mount
-mount | grep ram
-```
-
-**Screenshots:**
+We created a `/ram` directory, got the real path name to the directory, created a TOML configuration file to create a new mount. Then reloaded the `systemd` and started the mount with `systemctl start`. The process can be seen in the screenshots below:
 
 ![Part3-task5-1.png](Part3-task5-1.png)
 
 ![Part3-task5-2.png](Part3-task5-2.png)
-
-**How to boot into emergency CLI:**
-
-```bash
-systemd.unit=emergency.target
-```
