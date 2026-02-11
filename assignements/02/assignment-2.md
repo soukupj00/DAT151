@@ -1,10 +1,16 @@
 
 **Task 2:Normalisation**
-THe table currently conforms to the 1NF.
 
-t1:SSN, ENAME
+The table currently conforms to the 1NF.
 
-t2:PNUMBER,PNAME,PLOCATION
+3NF:
+<img width="886" height="361" alt="image" src="https://github.com/user-attachments/assets/d86e3fee-2e4f-4281-9a98-86fea1f30b45" />
 
-t3:PNUMBER, SNN, HOURS
+**Task 3:More Normalisation**
+
+The table currently conforms to the 2NF.
+
+3NF:
+<img width="898" height="227" alt="image" src="https://github.com/user-attachments/assets/5787c000-5ed4-4306-b5cc-8635cbc223d1" />
+
 
