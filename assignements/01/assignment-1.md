@@ -1,8 +1,10 @@
 # DAT151: Assignment 1 Report
 
+**Group:** 2
+
 **Group Members:** Soukup Jan, Fabienne Feilke
 
-**Date:** February 9, 2026
+**Date:** February 10, 2026
 
 Note: After monday's tutorial we shortened command line output texts so that the report isn't that long.
 
@@ -14,15 +16,15 @@ Note: After monday's tutorial we shortened command line output texts so that the
 
 **1. Describe some of the key differences between the Linux/UNIX filesystem and Windows. How are files and folders organised in Linux/UNIX?**
 
-**Hierarchy:** Linux uses a single unified tree structure starting at the root (`/`), whereas Windows uses drive letters (C:, D:) for different partitions.
+Linux uses a single unified tree structure starting at the root (`/`), while Windows uses drive letters (C:, D:) for different partitions.
 
-**Case sensitivity:** Linux filenames are case-sensitive (`File.txt` and `file.txt` are different), while Windows is generally case-insensitive.
+Linux filenames are case-sensitive (`File.txt` and `file.txt` are different), while Windows is generally case-insensitive.
 
-**File extensions:** Linux identifies file types by metadata/content rather than strictly relying on extensions like `.exe` or `.txt`.
+Linux identifies file types by metadata/content rather than strictly relying on extensions like `.exe` or `.txt`.
 
 **2. What is a mount point?**
 
-**Definition:** A mount point is a directory in the existing filesystem hierarchy where a new filesystem (like a partition) is attached to make it accessible. It acts as an acces node, allowing the operating system to treat external storage as subdirectory
+A mount point is a directory in the existing filesystem hierarchy where a new filesystem (like a partition) is attached to make it accessible. It acts as an acces node, allowing the operating system to treat external storage as subdirectory
 
 **Command line instructions:**
 
