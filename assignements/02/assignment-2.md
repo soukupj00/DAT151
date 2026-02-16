@@ -14,8 +14,237 @@ Create some tables as a normal database user (i.e. not root), insert some test d
 
 Use the MariaDB Knowledge Base to solve this task.
 
-TODO commands
+```sql
+MariaDB [assignment2]> show tables;
++-----------------------+
+| Tables_in_assignment2 |
++-----------------------+
+| my_innodb             |
+| my_myisam             |
++-----------------------+
+2 rows in set (0.001 sec)
 
+MariaDB [assignment2]> describe my_innodb;
++------------+--------------+------+-----+---------------------+----------------+
+| Field      | Type         | Null | Key | Default             | Extra          |
++------------+--------------+------+-----+---------------------+----------------+
+| id         | int(11)      | NO   | PRI | NULL                | auto_increment |
+| name       | varchar(100) | YES  |     | NULL                |                |
+| age        | int(11)      | YES  |     | NULL                |                |
+| created_at | timestamp    | YES  |     | current_timestamp() |                |
++------------+--------------+------+-----+---------------------+----------------+
+4 rows in set (0.002 sec)
+
+MariaDB [assignment2]> describe my_myisam;
++------------+--------------+------+-----+---------------------+----------------+
+| Field      | Type         | Null | Key | Default             | Extra          |
++------------+--------------+------+-----+---------------------+----------------+
+| id         | int(11)      | NO   | PRI | NULL                | auto_increment |
+| name       | varchar(100) | YES  |     | NULL                |                |
+| age        | int(11)      | YES  |     | NULL                |                |
+| created_at | timestamp    | YES  |     | current_timestamp() |                |
++------------+--------------+------+-----+---------------------+----------------+
+4 rows in set (0.002 sec)
+
+MariaDB [assignment2]> INSERT INTO my_innodb (name, age) VALUES 
+    -> ('Elias', 24),
+    -> ('Bob', 29),
+    -> ('Magnus', 35),
+    -> ('Sofie', 22),
+    -> ('Henrik', 41),
+    -> ('John', 27);
+Query OK, 6 rows affected (0.008 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [assignment2]> INSERT INTO my_myisam (name, age) VALUES  ('Elias', 24), ('Bob', 29), ('Magnus', 35), ('Sofie'
+, 22), ('Henrik', 41), ('John', 27);
+Query OK, 6 rows affected (0.001 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [assignment2]> select * from my_innodb;
++----+--------+------+---------------------+
+| id | name   | age  | created_at          |
++----+--------+------+---------------------+
+|  1 | Elias  |   24 | 2026-02-16 12:19:50 |
+|  2 | Bob    |   29 | 2026-02-16 12:19:50 |
+|  3 | Magnus |   35 | 2026-02-16 12:19:50 |
+|  4 | Sofie  |   22 | 2026-02-16 12:19:50 |
+|  5 | Henrik |   41 | 2026-02-16 12:19:50 |
+|  6 | John   |   27 | 2026-02-16 12:19:50 |
++----+--------+------+---------------------+
+6 rows in set (0.001 sec)
+
+MariaDB [assignment2]> select * from my_myisam;
++----+--------+------+---------------------+
+| id | name   | age  | created_at          |
++----+--------+------+---------------------+
+|  1 | Elias  |   24 | 2026-02-16 12:20:26 |
+|  2 | Bob    |   29 | 2026-02-16 12:20:26 |
+|  3 | Magnus |   35 | 2026-02-16 12:20:26 |
+|  4 | Sofie  |   22 | 2026-02-16 12:20:26 |
+|  5 | Henrik |   41 | 2026-02-16 12:20:26 |
+|  6 | John   |   27 | 2026-02-16 12:20:26 |
++----+--------+------+---------------------+
+6 rows in set (0.001 sec)
+
+Convert table to InnoDB and to MyISAM
+
+MariaDB [assignment2]> ALTER TABLE my_innodb ENGINE=MyISAM;
+Query OK, 6 rows affected (0.034 sec)              
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [assignment2]> ALTER TABLE my_innodb ENGINE=InnoDB;
+Query OK, 6 rows affected (2.252 sec)              
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [assignment2]> select * from my_innodb;
++----+--------+------+---------------------+
+| id | name   | age  | created_at          |
++----+--------+------+---------------------+
+|  1 | Elias  |   24 | 2026-02-16 12:19:50 |
+|  2 | Bob    |   29 | 2026-02-16 12:19:50 |
+|  3 | Magnus |   35 | 2026-02-16 12:19:50 |
+|  4 | Sofie  |   22 | 2026-02-16 12:19:50 |
+|  5 | Henrik |   41 | 2026-02-16 12:19:50 |
+|  6 | John   |   27 | 2026-02-16 12:19:50 |
++----+--------+------+---------------------+
+6 rows in set (0.001 sec)
+
+MariaDB [assignment2]> ALTER TABLE my_myisam ENGINE=MyISAM;
+Query OK, 6 rows affected (0.024 sec)              
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [assignment2]> select * from my_myisam;
++----+--------+------+---------------------+
+| id | name   | age  | created_at          |
++----+--------+------+---------------------+
+|  1 | Elias  |   24 | 2026-02-16 12:20:26 |
+|  2 | Bob    |   29 | 2026-02-16 12:20:26 |
+|  3 | Magnus |   35 | 2026-02-16 12:20:26 |
+|  4 | Sofie  |   22 | 2026-02-16 12:20:26 |
+|  5 | Henrik |   41 | 2026-02-16 12:20:26 |
+|  6 | John   |   27 | 2026-02-16 12:20:26 |
++----+--------+------+---------------------+
+6 rows in set (0.001 sec)
+
+SHOW INDEX
+MariaDB [assignment2]> SHOW INDEX FROM my_innodb;
++-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+
+| Table     | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Ignored |
++-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+
+| my_innodb |          0 | PRIMARY  |            1 | id          | A         |           6 |     NULL | NULL   |      | BTREE      |         |               | NO      |
++-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+
+1 row in set (0.001 sec)
+
+MariaDB [assignment2]> SHOW INDEX FROM my_myisam;
++-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+
+| Table     | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Ignored |
++-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+
+| my_myisam |          0 | PRIMARY  |            1 | id          | A         |           6 |     NULL | NULL   |      | BTREE      |         |               | NO      |
++-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+
+1 row in set (0.001 sec)
+
+ANALYZE TABLE
+MariaDB [assignment2]> ANALYZE TABLE my_innodb;
++-----------------------+---------+----------+----------+
+| Table                 | Op      | Msg_type | Msg_text |
++-----------------------+---------+----------+----------+
+| assignment2.my_innodb | analyze | status   | OK       |
++-----------------------+---------+----------+----------+
+1 row in set (0.004 sec)
+
+MariaDB [assignment2]> ANALYZE TABLE my_myisam;
++-----------------------+---------+----------+----------+
+| Table                 | Op      | Msg_type | Msg_text |
++-----------------------+---------+----------+----------+
+| assignment2.my_myisam | analyze | status   | OK       |
++-----------------------+---------+----------+----------+
+1 row in set (0.001 sec)
+
+CHECK TABLE
+MariaDB [assignment2]> CHECK TABLE my_innodb;
++-----------------------+-------+----------+----------+
+| Table                 | Op    | Msg_type | Msg_text |
++-----------------------+-------+----------+----------+
+| assignment2.my_innodb | check | status   | OK       |
++-----------------------+-------+----------+----------+
+1 row in set (0.000 sec)
+
+MariaDB [assignment2]> CHECK TABLE my_myisam;
++-----------------------+-------+----------+----------+
+| Table                 | Op    | Msg_type | Msg_text |
++-----------------------+-------+----------+----------+
+| assignment2.my_myisam | check | status   | OK       |
++-----------------------+-------+----------+----------+
+1 row in set (0.001 sec)
+
+REPAIR TABLE
+MariaDB [assignment2]> REPAIR TABLE my_myisam;
++-----------------------+--------+----------+----------+
+| Table                 | Op     | Msg_type | Msg_text |
++-----------------------+--------+----------+----------+
+| assignment2.my_myisam | repair | status   | OK       |
++-----------------------+--------+----------+----------+
+1 row in set (0.001 sec)
+
+MariaDB [assignment2]> REPAIR TABLE my_innodb;
++-----------------------+--------+----------+---------------------------------------------------------+
+| Table                 | Op     | Msg_type | Msg_text                                                |
++-----------------------+--------+----------+---------------------------------------------------------+
+| assignment2.my_innodb | repair | note     | The storage engine for the table doesn't support repair |
++-----------------------+--------+----------+---------------------------------------------------------+
+1 row in set (0.000 sec)
+
+OPTIMIZE TABLE
+MariaDB [assignment2]> OPTIMIZE TABLE my_innodb;
++-----------------------+----------+----------+-------------------------------------------------------------------+
+| Table                 | Op       | Msg_type | Msg_text                                                          |
++-----------------------+----------+----------+-------------------------------------------------------------------+
+| assignment2.my_innodb | optimize | note     | Table does not support optimize, doing recreate + analyze instead |
+| assignment2.my_innodb | optimize | status   | OK                                                                |
++-----------------------+----------+----------+-------------------------------------------------------------------+
+2 rows in set (0.049 sec)
+
+MariaDB [assignment2]> OPTIMIZE TABLE my_myisam;
++-----------------------+----------+----------+----------+
+| Table                 | Op       | Msg_type | Msg_text |
++-----------------------+----------+----------+----------+
+| assignment2.my_myisam | optimize | status   | OK       |
++-----------------------+----------+----------+----------+
+1 row in set (0.001 sec)
+
+CHECKSUM TABLE
+MariaDB [assignment2]> CHECKSUM TABLE my_innodb;
++-----------------------+------------+
+| Table                 | Checksum   |
++-----------------------+------------+
+| assignment2.my_innodb | 2122584765 |
++-----------------------+------------+
+1 row in set (0.001 sec)
+
+MariaDB [assignment2]> CHECKSUM TABLE my_myisam;
++-----------------------+------------+
+| Table                 | Checksum   |
++-----------------------+------------+
+| assignment2.my_myisam | 2206389053 |
++-----------------------+------------+
+1 row in set (0.001 sec)
+
+innochecksum
+innochecksum /var/lib/mysql/assignment2/my_innodb.ibd
+All are zero-filled pages.
+
+myisamchk
+myisamchk /var/lib/mysql/assignment2/my_myisam.MYI
+Checking MyISAM file: /var/lib/mysql/assignment2/my_myisam.MYI
+Data records:       6   Deleted blocks:       0
+- check file-size
+- check record delete-chain
+- check key delete-chain
+- check index reference
+- check data record references index: 1
+- check record links
+```
 
 ---
 
@@ -71,3 +300,173 @@ conform to 3NF.
 - DEPT (DNUMBER, DNAME, DMGRSSN)
 
 ## Task 4: Normalisation & Denormalisation
+
+```sql
+Table Faculty {
+  f_code varchar(10) [pk]
+  f_name varchar(100) [unique]
+  phone varchar(15)
+  address varchar(100)
+}
+
+Table Department {
+  dept_name varchar(100) [pk]
+  f_code varchar(10) [ref: > Faculty.f_code]
+}
+
+Table StudyProgram {
+  program_code varchar(15) [pk]
+  program_name varchar(100)
+  study_level Enum('Bachelors', 'Masters', 'PhD')
+  f_code varchar(10) [ref: > Faculty.f_code]
+}
+
+Table Student {
+  student_nr varchar(15) [pk]
+  birth_nr varchar(12) [unique]
+  s_name varchar(100)
+  current_address varchar(100)
+  phone_number varchar(15)
+  home_address varchar(100)
+  birth_date date
+  s_gender Enum ('Male', 'Female', 'Other')
+  s_year Enum ('1st', '2nd', '3rd')
+  program_code varchar(15) [ref: > StudyProgram.program_code]
+}
+
+Table Teacher {
+  t_number int [pk]
+  t_name varchar(100)
+}
+
+Table Course {
+  c_code varchar(10) [pk]
+  c_name varchar(100)
+  lecture_hours_per_week int
+  dept_name varchar(100) [ref: > Department.dept_name]
+}
+
+Table CourseSchedule {
+  c_code varchar(10) [ref: > Course.c_code]
+  c_year int
+  teacher_number int [ref: > Teacher.t_number]
+
+  indexes {
+    (c_code, c_year) [pk]
+  }
+}
+
+Table Grade {
+  student_nr varchar(15) [ref: > Student.student_nr]
+  c_code varchar(10)
+  c_year int
+  grade char(1)
+
+  indexes {
+    (student_nr, c_code, c_year) [pk]
+  }
+}
+
+Ref: Grade.(c_code, c_year) > CourseSchedule.(c_code, c_year)
+```
+
+![Database Diagram](./DAT151-Task2.png)
+
+**MariaDB Implementation**
+
+```sql
+MariaDB [PRIVBASE]> show tables;
+Empty set (0.001 sec)
+
+MariaDB [PRIVBASE]> CREATE TABLE FACULTY (
+    ->     f_code VARCHAR(10) PRIMARY KEY,
+    ->     f_name VARCHAR(100) UNIQUE,
+    ->     phone VARCHAR(15),
+    ->     address VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.043 sec)
+
+MariaDB [PRIVBASE]> CREATE TABLE DEPARTMENT (
+    ->     dept_name VARCHAR(100) PRIMARY KEY,
+    ->     f_code VARCHAR(10),
+    ->     FOREIGN KEY (f_code) REFERENCES FACULTY(f_code) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.024 sec)
+
+MariaDB [PRIVBASE]> CREATE TABLE STUDY_PROGRAM (
+    ->     program_code VARCHAR(15) PRIMARY KEY,
+    ->     program_name VARCHAR(100),
+    ->     study_level ENUM('Bachelors', 'Masters', 'PhD'),
+    ->     f_code VARCHAR(10),
+    ->     FOREIGN KEY (f_code) REFERENCES FACULTY(f_code) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.028 sec)
+
+MariaDB [PRIVBASE]> CREATE TABLE STUDENT (
+    ->     student_nr VARCHAR(15) PRIMARY KEY,
+    ->     birth_nr VARCHAR(12) UNIQUE,
+    ->     s_name VARCHAR(100),
+    ->     current_address VARCHAR(100),
+    ->     phone_number VARCHAR(15),
+    ->     home_address VARCHAR(100),
+    ->     birth_date DATE,
+    ->     s_gender ENUM('Male', 'Female', 'Other'),
+    ->     s_year ENUM('1st', '2nd', '3rd'),
+    ->     program_code VARCHAR(15),
+    ->     FOREIGN KEY (program_code) REFERENCES STUDY_PROGRAM(program_code) ON DELETE SET NULL
+    -> );
+Query OK, 0 rows affected (0.025 sec)
+
+MariaDB [PRIVBASE]> CREATE TABLE TEACHER (
+    ->     t_number VARCHAR(20) PRIMARY KEY,
+    ->     t_name VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.019 sec)
+
+MariaDB [PRIVBASE]> CREATE TABLE COURSE (
+    ->     c_code VARCHAR(10) PRIMARY KEY,
+    ->     c_name VARCHAR(100),
+    ->     lecture_hours_per_week INT,
+    ->     dept_name VARCHAR(100),
+    ->     FOREIGN KEY (dept_name) REFERENCES DEPARTMENT(dept_name) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.032 sec)
+
+MariaDB [PRIVBASE]> CREATE TABLE COURSE_SCHEDULE (
+    ->     c_code VARCHAR(10),
+    ->     c_year INT,
+    ->     teacher_number VARCHAR(20),
+    ->     PRIMARY KEY (c_code, c_year),
+    ->     FOREIGN KEY (c_code) REFERENCES COURSE(c_code) ON DELETE CASCADE,
+    ->     FOREIGN KEY (teacher_number) REFERENCES TEACHER(t_number) ON DELETE SET NULL
+    -> );
+Query OK, 0 rows affected (0.028 sec)
+
+MariaDB [PRIVBASE]> CREATE TABLE GRADE (
+    ->     student_nr VARCHAR(15),
+    ->     c_code VARCHAR(10),
+    ->     c_year INT,
+    ->     grade CHAR(1),
+    ->     PRIMARY KEY (student_nr, c_code, c_year),
+    ->     FOREIGN KEY (student_nr) REFERENCES STUDENT(student_nr) ON DELETE CASCADE,
+    ->     FOREIGN KEY (c_code, c_year) REFERENCES COURSE_SCHEDULE(c_code, c_year) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.023 sec)
+
+MariaDB [PRIVBASE]> show tables;
++--------------------+
+| Tables_in_PRIVBASE |
++--------------------+
+| COURSE             |
+| COURSE_SCHEDULE    |
+| DEPARTMENT         |
+| FACULTY            |
+| GRADE              |
+| STUDENT            |
+| STUDY_PROGRAM      |
+| TEACHER            |
++--------------------+
+8 rows in set (0.001 sec)
+```
+
+**c) For each of the following SQL-queries, propose a concrete solution for a denormalized model of the schema from a). Discuss whether the denormalised model might improve performance:**
