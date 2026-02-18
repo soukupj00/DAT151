@@ -310,18 +310,16 @@ What normal form does it currently conform to? Normalize it to 3NF if it does no
 
 ### Answers
 
-//TODO This should be fine, just recheck
-
 - The schema currently conforms to the 1NF (atomic values)
 - It violates the 2NF for the following reasons:
   - ENAME depends only on the SSN, which is only a part of the composite primary key
   - PNAME and PLOCATION depend on PNUMBER, which is also only a part of the composite primary key
-- We can normalize the schema into 3NF by making it more tables - 3 tables to be exact - EMP (Employee), PROJ (Project) and EMP_PROJ. The tables will have following data:
+- We can normalize the schema into 3NF by creating 3 tables: EMP (Employee), PROJ (Project), and EMP_PROJ. The tables will have the following data:
   - EMP (SSN, ENAME)
   - PROJ (PNUMBER, PNAME, PLOCATION)
   - EMP_PROJ (SSN, PNUMBER, HOURS)
-    - SSN and PNUMBER are both foreign keys referenced from EMP and PROJ tables
-- After the changes, the schema is in the 3NF, actually even in BCNF, because all functional dependencies are either trivial or have full candidate key on the left side
+    - SSN and PNUMBER are both foreign keys referenced from the EMP and PROJ tables
+- After the changes, the schema is in the 3NF, actually even in BCNF, because all functional dependencies are either trivial or have a full candidate key on the left side.
 
 ---
 
@@ -338,16 +336,12 @@ conform to 3NF.
 
 ### Answers
 
-//TODO Rewrite this and check it again
-
-- The schema currently conforms to the 1NF (atomic values)
-- It also conform the 2NF (no non-key attribute is dependent on part of a composite key),
-  - 2NF allows non-key attribute to be dependent on a non-key attribute, so DNUMBER → DNAME, DMGRSSN is okay
-- It violates the 3NF, because non-key attributes DNAME and DMGRSSN are dependent on the key transitively using another non-key attribute DNUMBER
-- We can normalize it to the 3NF by making it into 2 tables - EMP and DEPT
-- EMP (SSN, ENAME, BDATE, ADDRESS, DNUMBER)
-  - DNUMBER is foreign key referenced from the DEPT table
-- DEPT (DNUMBER, DNAME, DMGRSSN)
+- The schema currently conforms to the 1NF (atomic values). It also conforms to the 2NF (no non-key attribute is dependent on part of a composite key),
+  - 2NF allows for a non-key attribute to be dependent on another non-key attribute
+  - As such, `DNUMBER → [DNAME, DMGRSSN]` is okay
+- It violates the 3NF because the non-key attributes **DNAME** and **DMGRSSN** are transitively dependent on the key via another non-key attribute, **DNUMBER**. We can normalize it into 3NF by splitting it into 2 tables: EMP and DEPT.
+- `EMP (SSN, ENAME, BDATE, ADDRESS, DNUMBER)` where **DNUMBER** is a foreign key referenced from the DEPT table
+- `DEPT (DNUMBER, DNAME, DMGRSSN)`
 
 ## Task 4: Normalisation & Denormalisation
 
@@ -523,8 +517,32 @@ MariaDB [PRIVBASE]> show tables;
 
 1. `SELECT s.SNAME, f.FNAME FROM STUDENT s, FACULTY f WHERE s.FCODE = f.FCODE;`
 
+For this join, the main goal of denormalization is to eliminate the cost of linking the two tables every time. We basically have two options here:
+
+- **Create a Materialized View/Snapshot:** We could build a dedicated table that just holds `sname` and `fname`.
+- **Add a Redundant Column:** We could simply add the `fname` column directly into the `STUDENT` table.
+
+Both approaches remove the need for a join, making reads much faster. However, the trade-off is that we break 3NF (Third Normal Form). We also introduce overhead for **DML operations** (INSERT/UPDATE/DELETE). We would need to set up database **triggers** or stored procedures to ensure that if a faculty member changes their name, that change propagates to our denormalized data instantly.
+
+*Honest take:* Since the `FACULTY` table is likely very small (low cardinality), the database engine can join these tables very efficiently in memory. A standard index on the foreign key (`FCODE`) is probably the smarter choice here rather than dealing with the maintenance headaches of denormalization.
 
 2. `SELECT COUNT(*) FROM STUDENT WHERE FCODE = 'FTMS';`
 
+This is a textbook case for **Derived Attributes**. Instead of counting the rows from scratch every time we run the query, we can store the current count as a value in a parent table (like `FACULTY`) or a separate summary table.
+
+- **Maintenance:** We have to keep this value fresh. We could use triggers to increment/decrement the count whenever a student is added or removed. Alternatively, if real-time accuracy isn’t critical, we could run a batch job to update the count once a night.
+- **Performance:** This makes the `SELECT` query near-instant, which is great if the `STUDENT` table is massive.
+
+*However*, similar to the previous example, we might be over-engineering. If we have an index on `FCODE`, the database can perform an index scan (counting the entries in the index leaves) without touching the actual table heap. That might be fast enough without duplicating data.
 
 3. `SELECT DISTINCT CYEAR FROM COURSE_SCHEDULE;`
+
+I’m skeptical that denormalization is necessary here. If we have an index on `CYEAR`, the database can just scan the unique keys in the index tree very quickly.
+
+But, if we strictly wanted to denormalize this to optimize for the distinct selection:
+We could create a separate lookup table containing only unique `CYEAR` values.
+
+- **Inserts:** Easy. When a new schedule is added, we check if the year exists in our lookup table; if not, we add it.
+- **Deletes:** This is where it gets messy (and less efficient). If we delete a row from `COURSE_SCHEDULE`, we have to scan the *entire* table to see if that was the *last* record with that specific year before we can safely remove it from our lookup table.
+
+Basically, the "check-before-delete" logic is expensive and likely negates the read benefits. An index is the better route.
