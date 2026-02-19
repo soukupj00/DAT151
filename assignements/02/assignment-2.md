@@ -16,79 +16,79 @@ Use the MariaDB Knowledge Base to solve this task.
 
 We first created the database tables and then input exampel data into both tables.
 
-    ```sql
-    MariaDB [assignment2]> show tables;
-    +-----------------------+
-    | Tables_in_assignment2 |
-    +-----------------------+
-    | my_innodb             |
-    | my_myisam             |
-    +-----------------------+
-    2 rows in set (0.001 sec)
+```sql
+MariaDB [assignment2]> show tables;
++-----------------------+
+| Tables_in_assignment2 |
++-----------------------+
+| my_innodb             |
+| my_myisam             |
++-----------------------+
+2 rows in set (0.001 sec)
 
-    MariaDB [assignment2]> describe my_innodb;
-    +------------+--------------+------+-----+---------------------+----------------+
-    | Field      | Type         | Null | Key | Default             | Extra          |
-    +------------+--------------+------+-----+---------------------+----------------+
-    | id         | int(11)      | NO   | PRI | NULL                | auto_increment |
-    | name       | varchar(100) | YES  |     | NULL                |                |
-    | age        | int(11)      | YES  |     | NULL                |                |
-    | created_at | timestamp    | YES  |     | current_timestamp() |                |
-    +------------+--------------+------+-----+---------------------+----------------+
-    4 rows in set (0.002 sec)
+MariaDB [assignment2]> describe my_innodb;
++------------+--------------+------+-----+---------------------+----------------+
+| Field      | Type         | Null | Key | Default             | Extra          |
++------------+--------------+------+-----+---------------------+----------------+
+| id         | int(11)      | NO   | PRI | NULL                | auto_increment |
+| name       | varchar(100) | YES  |     | NULL                |                |
+| age        | int(11)      | YES  |     | NULL                |                |
+| created_at | timestamp    | YES  |     | current_timestamp() |                |
++------------+--------------+------+-----+---------------------+----------------+
+4 rows in set (0.002 sec)
 
-    MariaDB [assignment2]> describe my_myisam;
-    +------------+--------------+------+-----+---------------------+----------------+
-    | Field      | Type         | Null | Key | Default             | Extra          |
-    +------------+--------------+------+-----+---------------------+----------------+
-    | id         | int(11)      | NO   | PRI | NULL                | auto_increment |
-    | name       | varchar(100) | YES  |     | NULL                |                |
-    | age        | int(11)      | YES  |     | NULL                |                |
-    | created_at | timestamp    | YES  |     | current_timestamp() |                |
-    +------------+--------------+------+-----+---------------------+----------------+
-    4 rows in set (0.002 sec)
+MariaDB [assignment2]> describe my_myisam;
++------------+--------------+------+-----+---------------------+----------------+
+| Field      | Type         | Null | Key | Default             | Extra          |
++------------+--------------+------+-----+---------------------+----------------+
+| id         | int(11)      | NO   | PRI | NULL                | auto_increment |
+| name       | varchar(100) | YES  |     | NULL                |                |
+| age        | int(11)      | YES  |     | NULL                |                |
+| created_at | timestamp    | YES  |     | current_timestamp() |                |
++------------+--------------+------+-----+---------------------+----------------+
+4 rows in set (0.002 sec)
 
-    MariaDB [assignment2]> INSERT INTO my_innodb (name, age) VALUES 
-        -> ('Elias', 24),
-        -> ('Bob', 29),
-        -> ('Magnus', 35),
-        -> ('Sofie', 22),
-        -> ('Henrik', 41),
-        -> ('John', 27);
-    Query OK, 6 rows affected (0.008 sec)
-    Records: 6  Duplicates: 0  Warnings: 0
+MariaDB [assignment2]> INSERT INTO my_innodb (name, age) VALUES 
+    -> ('Elias', 24),
+    -> ('Bob', 29),
+    -> ('Magnus', 35),
+    -> ('Sofie', 22),
+    -> ('Henrik', 41),
+    -> ('John', 27);
+Query OK, 6 rows affected (0.008 sec)
+Records: 6  Duplicates: 0  Warnings: 0
 
-    MariaDB [assignment2]> INSERT INTO my_myisam (name, age) VALUES  ('Elias', 24), ('Bob', 29), ('Magnus', 35), ('Sofie'
-    , 22), ('Henrik', 41), ('John', 27);
-    Query OK, 6 rows affected (0.001 sec)
-    Records: 6  Duplicates: 0  Warnings: 0
+MariaDB [assignment2]> INSERT INTO my_myisam (name, age) VALUES  ('Elias', 24), ('Bob', 29), ('Magnus', 35), ('Sofie'
+, 22), ('Henrik', 41), ('John', 27);
+Query OK, 6 rows affected (0.001 sec)
+Records: 6  Duplicates: 0  Warnings: 0
 
-    MariaDB [assignment2]> select * from my_innodb;
-    +----+--------+------+---------------------+
-    | id | name   | age  | created_at          |
-    +----+--------+------+---------------------+
-    |  1 | Elias  |   24 | 2026-02-16 12:19:50 |
-    |  2 | Bob    |   29 | 2026-02-16 12:19:50 |
-    |  3 | Magnus |   35 | 2026-02-16 12:19:50 |
-    |  4 | Sofie  |   22 | 2026-02-16 12:19:50 |
-    |  5 | Henrik |   41 | 2026-02-16 12:19:50 |
-    |  6 | John   |   27 | 2026-02-16 12:19:50 |
-    +----+--------+------+---------------------+
-    6 rows in set (0.001 sec)
+MariaDB [assignment2]> select * from my_innodb;
++----+--------+------+---------------------+
+| id | name   | age  | created_at          |
++----+--------+------+---------------------+
+|  1 | Elias  |   24 | 2026-02-16 12:19:50 |
+|  2 | Bob    |   29 | 2026-02-16 12:19:50 |
+|  3 | Magnus |   35 | 2026-02-16 12:19:50 |
+|  4 | Sofie  |   22 | 2026-02-16 12:19:50 |
+|  5 | Henrik |   41 | 2026-02-16 12:19:50 |
+|  6 | John   |   27 | 2026-02-16 12:19:50 |
++----+--------+------+---------------------+
+6 rows in set (0.001 sec)
 
-    MariaDB [assignment2]> select * from my_myisam;
-    +----+--------+------+---------------------+
-    | id | name   | age  | created_at          |
-    +----+--------+------+---------------------+
-    |  1 | Elias  |   24 | 2026-02-16 12:20:26 |
-    |  2 | Bob    |   29 | 2026-02-16 12:20:26 |
-    |  3 | Magnus |   35 | 2026-02-16 12:20:26 |
-    |  4 | Sofie  |   22 | 2026-02-16 12:20:26 |
-    |  5 | Henrik |   41 | 2026-02-16 12:20:26 |
-    |  6 | John   |   27 | 2026-02-16 12:20:26 |
-    +----+--------+------+---------------------+
-    6 rows in set (0.001 sec)
-    ```
+MariaDB [assignment2]> select * from my_myisam;
++----+--------+------+---------------------+
+| id | name   | age  | created_at          |
++----+--------+------+---------------------+
+|  1 | Elias  |   24 | 2026-02-16 12:20:26 |
+|  2 | Bob    |   29 | 2026-02-16 12:20:26 |
+|  3 | Magnus |   35 | 2026-02-16 12:20:26 |
+|  4 | Sofie  |   22 | 2026-02-16 12:20:26 |
+|  5 | Henrik |   41 | 2026-02-16 12:20:26 |
+|  6 | John   |   27 | 2026-02-16 12:20:26 |
++----+--------+------+---------------------+
+6 rows in set (0.001 sec)
+```
 
 1. **Convert table to InnoDB and to MyISAM**
 
@@ -323,7 +323,7 @@ What normal form does it currently conform to? Normalize it to 3NF if it does no
 
 ---
 
-## Task 3: More normalization
+## Task 3: More normalisation
 
 This task is theory only. You do not need to implement anything on the lab computers.
 
@@ -517,32 +517,29 @@ MariaDB [PRIVBASE]> show tables;
 
 1. `SELECT s.SNAME, f.FNAME FROM STUDENT s, FACULTY f WHERE s.FCODE = f.FCODE;`
 
-For this join, the main goal of denormalization is to eliminate the cost of linking the two tables every time. We basically have two options here:
+For this join, the primary goal of denormalization is to eliminate the cost of linking the two tables every time. We have two options (that we came up with) to solve this issue:
 
 - **Create a Materialized View/Snapshot:** We could build a dedicated table that just holds `sname` and `fname`.
-- **Add a Redundant Column:** We could simply add the `fname` column directly into the `STUDENT` table.
+- **Add a Column:** We could add the `fname` column directly into the `STUDENT` table.
 
-Both approaches remove the need for a join, making reads much faster. However, the trade-off is that we break 3NF (Third Normal Form). We also introduce overhead for **DML operations** (INSERT/UPDATE/DELETE). We would need to set up database **triggers** or stored procedures to ensure that if a faculty member changes their name, that change propagates to our denormalized data instantly.
+Both approaches remove the need for a join, making reads much faster. However, the trade-off is that we break 3NF. It also makes **DML operations** (INSERT/UPDATE/DELETE) more costly, as we have to update multiple tables. We would need to set up database **triggers** or stored procedures to ensure that if a faculty member changes their name, that change propagates to our denormalized data instantly.
 
-*Honest take:* Since the `FACULTY` table is likely very small (low cardinality), the database engine can join these tables very efficiently in memory. A standard index on the foreign key (`FCODE`) is probably the smarter choice here rather than dealing with the maintenance headaches of denormalization.
+However, since the `FACULTY` table is likely very small (has low cardinality), the database engine can join these tables very efficiently in memory. A standard index on the foreign key (`FCODE`) is most likely the smarter choice here rather than dealing with the maintenance of denormalization.
 
 2. `SELECT COUNT(*) FROM STUDENT WHERE FCODE = 'FTMS';`
 
-This is a textbook case for **Derived Attributes**. Instead of counting the rows from scratch every time we run the query, we can store the current count as a value in a parent table (like `FACULTY`) or a separate summary table.
+This is a good example of **Derived Attributes** from lectures. Instead of counting the rows from scratch every time we run the query, we can store the current count as a value in a parent table (like `FACULTY`) or a separate summary table.
 
-- **Maintenance:** We have to keep this value fresh. We could use triggers to increment/decrement the count whenever a student is added or removed. Alternatively, if real-time accuracy isn’t critical, we could run a batch job to update the count once a night.
-- **Performance:** This makes the `SELECT` query near-instant, which is great if the `STUDENT` table is massive.
+- **Maintenance:** We have to keep this value updated. We could use triggers to increment/decrement the count whenever a student is added or removed. ANother option, if real-time accuracy isn’t needed, is to run a batch job to update the count once a day (at night for example).
+- **Performance:** This makes the `SELECT` query almost instantaneous, which is great if the `STUDENT` table is massive.
 
-*However*, similar to the previous example, we might be over-engineering. If we have an index on `FCODE`, the database can perform an index scan (counting the entries in the index leaves) without touching the actual table heap. That might be fast enough without duplicating data.
+However, similar to the previous query, it might be better to just use an index. If we have an index on `FCODE`, the database can perform an index scan (counting the entries in the index leaves) without touching the actual table heap. That solution might be fast enough without duplicating data.
 
 3. `SELECT DISTINCT CYEAR FROM COURSE_SCHEDULE;`
 
-I’m skeptical that denormalization is necessary here. If we have an index on `CYEAR`, the database can just scan the unique keys in the index tree very quickly.
+We think that denormalization is not necessary here. If we have an index on `CYEAR`, the database can just scan the unique keys in the index tree very quickly.
 
-But, if we strictly wanted to denormalize this to optimize for the distinct selection:
-We could create a separate lookup table containing only unique `CYEAR` values.
+But, if we strictly wanted to denormalize this to optimize for the distinct selection, we could create a separate lookup table containing only unique `CYEAR` values.
 
-- **Inserts:** Easy. When a new schedule is added, we check if the year exists in our lookup table; if not, we add it.
-- **Deletes:** This is where it gets messy (and less efficient). If we delete a row from `COURSE_SCHEDULE`, we have to scan the *entire* table to see if that was the *last* record with that specific year before we can safely remove it from our lookup table.
-
-Basically, the "check-before-delete" logic is expensive and likely negates the read benefits. An index is the better route.
+- **Insert:** When a new schedule is added, we check if the year exists in our lookup table - if not, we add it.
+- **Delete:** This is more complicated. If we delete a row from `COURSE_SCHEDULE`, we have to scan the whole lookup table to see if that was the last record with that specific year before we can safely remove it from our lookup table. This operation is quite expensive and will most likely negate the read benefits of read. If DELETE does not happen often, then it might be worth keeping it. This could again be solved using and an index.
