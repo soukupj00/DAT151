@@ -14,7 +14,7 @@ Create some tables as a normal database user (i.e. not root), insert some test d
 
 Use the MariaDB Knowledge Base to solve this task.
 
-We first created the database tables and then input exampel data into both tables.
+We first created the database tables and then input example data into both tables.
 
 ```sql
 MariaDB [assignment2]> show tables;
@@ -379,7 +379,7 @@ Table Student {
 }
 
 Table Teacher {
-  t_number int [pk]
+  t_number varchar(20) [pk]
   t_name varchar(100)
 }
 
@@ -530,7 +530,7 @@ However, since the `FACULTY` table is likely very small (has low cardinality), t
 
 This is a good example of **Derived Attributes** from lectures. Instead of counting the rows from scratch every time we run the query, we can store the current count as a value in a parent table (like `FACULTY`) or a separate summary table.
 
-- **Maintenance:** We have to keep this value updated. We could use triggers to increment/decrement the count whenever a student is added or removed. ANother option, if real-time accuracy isn’t needed, is to run a batch job to update the count once a day (at night for example).
+- **Maintenance:** We have to keep this value updated. We could use triggers to increment/decrement the count whenever a student is added or removed. Another option, if real-time accuracy isn’t needed, is to run a batch job to update the count once a day (at night for example).
 - **Performance:** This makes the `SELECT` query almost instantaneous, which is great if the `STUDENT` table is massive.
 
 However, similar to the previous query, it might be better to just use an index. If we have an index on `FCODE`, the database can perform an index scan (counting the entries in the index leaves) without touching the actual table heap. That solution might be fast enough without duplicating data.
