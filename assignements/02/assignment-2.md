@@ -4,7 +4,7 @@
 
 **Group Members:** Soukup Jan, Fabienne Feilke
 
-**Date:** February , 2026
+**Date:** February 23, 2026
 
 ---
 
@@ -524,7 +524,7 @@ For this join, the primary goal of denormalization is to eliminate the cost of l
 
 Both approaches remove the need for a join, making reads much faster. However, the trade-off is that we break 3NF. It also makes **DML operations** (INSERT/UPDATE/DELETE) more costly, as we have to update multiple tables. We would need to set up database **triggers** or stored procedures to ensure that if a faculty member changes their name, that change propagates to our denormalized data instantly.
 
-However, since the `FACULTY` table is likely very small (has low cardinality), the database engine can join these tables very efficiently in memory. A standard index on the foreign key (`FCODE`) is most likely the better choice here rather than dealing with the maintenance of denormalization.
+However, since the `FACULTY` table is likely very small (has low cardinality), the database engine can join these tables very efficiently in memory. A standard index on the foreign key (`FCODE`) is most likely the smarter choice here rather than dealing with the maintenance of denormalization.
 
 2. `SELECT COUNT(*) FROM STUDENT WHERE FCODE = 'FTMS';`
 
