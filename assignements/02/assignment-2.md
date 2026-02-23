@@ -423,79 +423,79 @@ MariaDB [PRIVBASE]> show tables;
 Empty set (0.001 sec)
 
 MariaDB [PRIVBASE]> CREATE TABLE FACULTY (
-    ->     f_code VARCHAR(10) PRIMARY KEY,
-    ->     f_name VARCHAR(100) UNIQUE,
-    ->     phone VARCHAR(15),
-    ->     address VARCHAR(100)
-    -> );
-Query OK, 0 rows affected (0.043 sec)
+    ->     FCODE CHAR(10) PRIMARY KEY,
+    ->     FNAME VARCHAR(100) UNIQUE,
+    ->     PHONE VARCHAR(15),
+    ->     ADDRESS VARCHAR(100)
+    -> ) ENGINE=InnoDB;
+Query OK, 0 rows affected (0.021 sec)
 
 MariaDB [PRIVBASE]> CREATE TABLE DEPARTMENT (
-    ->     dept_name VARCHAR(100) PRIMARY KEY,
-    ->     f_code VARCHAR(10),
-    ->     FOREIGN KEY (f_code) REFERENCES FACULTY(f_code) ON DELETE CASCADE
-    -> );
+    ->     DEPT_CODE CHAR(10) PRIMARY KEY,
+    ->     FCODE CHAR(10),
+    ->     FOREIGN KEY (FCODE) REFERENCES FACULTY(FCODE)
+    -> ) ENGINE=InnoDB;
 Query OK, 0 rows affected (0.024 sec)
 
 MariaDB [PRIVBASE]> CREATE TABLE STUDY_PROGRAM (
-    ->     program_code VARCHAR(15) PRIMARY KEY,
-    ->     program_name VARCHAR(100),
-    ->     study_level ENUM('Bachelors', 'Masters', 'PhD'),
-    ->     f_code VARCHAR(10),
-    ->     FOREIGN KEY (f_code) REFERENCES FACULTY(f_code) ON DELETE CASCADE
-    -> );
-Query OK, 0 rows affected (0.028 sec)
+    ->     PROGRAM_CODE CHAR(5) PRIMARY KEY,
+    ->     PROGRAM_NAME VARCHAR(100)
+    -> ) ENGINE=InnoDB;
+Query OK, 0 rows affected (0.015 sec)
 
 MariaDB [PRIVBASE]> CREATE TABLE STUDENT (
-    ->     student_nr VARCHAR(15) PRIMARY KEY,
-    ->     birth_nr VARCHAR(12) UNIQUE,
-    ->     s_name VARCHAR(100),
-    ->     current_address VARCHAR(100),
-    ->     phone_number VARCHAR(15),
-    ->     home_address VARCHAR(100),
-    ->     birth_date DATE,
-    ->     s_gender ENUM('Male', 'Female', 'Other'),
-    ->     s_year ENUM('1st', '2nd', '3rd'),
-    ->     program_code VARCHAR(15),
-    ->     FOREIGN KEY (program_code) REFERENCES STUDY_PROGRAM(program_code) ON DELETE SET NULL
-    -> );
-Query OK, 0 rows affected (0.025 sec)
+    ->     STUDENT_NR CHAR(6) PRIMARY KEY,
+    ->     BIRTH_NR VARCHAR(12) UNIQUE,
+    ->     SNAME VARCHAR(100),
+    ->     CURRENT_ADDRESS VARCHAR(100),
+    ->     PHONE_NUMBER VARCHAR(15),
+    ->     HOME_ADDRESS VARCHAR(100),
+    ->     BIRTH_DATE DATE,
+    ->     GENDER ENUM('Male', 'Female', 'Other'),
+    ->     SYEAR ENUM('1st', '2nd', '3rd'),
+    ->     STUDY_LEVEL ENUM('bachelor', 'master', 'PHD'),
+    ->     FCODE CHAR(10), 
+    ->     PROGRAM_CODE CHAR(5), 
+    ->     FOREIGN KEY (FCODE) REFERENCES FACULTY(FCODE),
+    ->     FOREIGN KEY (PROGRAM_CODE) REFERENCES STUDY_PROGRAM(PROGRAM_CODE)
+    -> ) ENGINE=InnoDB;
+Query OK, 0 rows affected (0.026 sec)
 
 MariaDB [PRIVBASE]> CREATE TABLE TEACHER (
-    ->     t_number VARCHAR(20) PRIMARY KEY,
-    ->     t_name VARCHAR(100)
-    -> );
-Query OK, 0 rows affected (0.019 sec)
+    ->     T_NUMBER CHAR(10) PRIMARY KEY,
+    ->     TNAME VARCHAR(100)
+    -> ) ENGINE=InnoDB;
+Query OK, 0 rows affected (0.016 sec)
 
 MariaDB [PRIVBASE]> CREATE TABLE COURSE (
-    ->     c_code VARCHAR(10) PRIMARY KEY,
-    ->     c_name VARCHAR(100),
-    ->     lecture_hours_per_week INT,
-    ->     dept_name VARCHAR(100),
-    ->     FOREIGN KEY (dept_name) REFERENCES DEPARTMENT(dept_name) ON DELETE CASCADE
-    -> );
-Query OK, 0 rows affected (0.032 sec)
+    ->     CCODE CHAR(10) PRIMARY KEY,
+    ->     CNAME VARCHAR(100),
+    ->     LECTURE_HOURS INT,
+    ->     DEPT_CODE CHAR(10),
+    ->     FOREIGN KEY (DEPT_CODE) REFERENCES DEPARTMENT(DEPT_CODE)
+    -> ) ENGINE=InnoDB;
+Query OK, 0 rows affected (0.021 sec)
 
 MariaDB [PRIVBASE]> CREATE TABLE COURSE_SCHEDULE (
-    ->     c_code VARCHAR(10),
-    ->     c_year INT,
-    ->     teacher_number VARCHAR(20),
-    ->     PRIMARY KEY (c_code, c_year),
-    ->     FOREIGN KEY (c_code) REFERENCES COURSE(c_code) ON DELETE CASCADE,
-    ->     FOREIGN KEY (teacher_number) REFERENCES TEACHER(t_number) ON DELETE SET NULL
-    -> );
-Query OK, 0 rows affected (0.028 sec)
+    ->     CCODE CHAR(10),
+    ->     CYEAR INT,
+    ->     T_NUMBER CHAR(10),
+    ->     PRIMARY KEY (CCODE, CYEAR),
+    ->     FOREIGN KEY (CCODE) REFERENCES COURSE(CCODE),
+    ->     FOREIGN KEY (T_NUMBER) REFERENCES TEACHER(T_NUMBER)
+    -> ) ENGINE=InnoDB;
+Query OK, 0 rows affected (0.022 sec)
 
 MariaDB [PRIVBASE]> CREATE TABLE GRADE (
-    ->     student_nr VARCHAR(15),
-    ->     c_code VARCHAR(10),
-    ->     c_year INT,
-    ->     grade CHAR(1),
-    ->     PRIMARY KEY (student_nr, c_code, c_year),
-    ->     FOREIGN KEY (student_nr) REFERENCES STUDENT(student_nr) ON DELETE CASCADE,
-    ->     FOREIGN KEY (c_code, c_year) REFERENCES COURSE_SCHEDULE(c_code, c_year) ON DELETE CASCADE
-    -> );
-Query OK, 0 rows affected (0.023 sec)
+    ->     STUDENT_NR CHAR(6),
+    ->     CCODE CHAR(10),
+    ->     CYEAR INT,
+    ->     GRADE CHAR(1),
+    ->     PRIMARY KEY (STUDENT_NR, CCODE, CYEAR),
+    ->     FOREIGN KEY (STUDENT_NR) REFERENCES STUDENT(STUDENT_NR),
+    ->     FOREIGN KEY (CCODE, CYEAR) REFERENCES COURSE_SCHEDULE(CCODE, CYEAR)
+    -> ) ENGINE=InnoDB;
+Query OK, 0 rows affected (0.024 sec)
 
 MariaDB [PRIVBASE]> show tables;
 +--------------------+
@@ -524,7 +524,7 @@ For this join, the primary goal of denormalization is to eliminate the cost of l
 
 Both approaches remove the need for a join, making reads much faster. However, the trade-off is that we break 3NF. It also makes **DML operations** (INSERT/UPDATE/DELETE) more costly, as we have to update multiple tables. We would need to set up database **triggers** or stored procedures to ensure that if a faculty member changes their name, that change propagates to our denormalized data instantly.
 
-However, since the `FACULTY` table is likely very small (has low cardinality), the database engine can join these tables very efficiently in memory. A standard index on the foreign key (`FCODE`) is most likely the smarter choice here rather than dealing with the maintenance of denormalization.
+However, since the `FACULTY` table is likely very small (has low cardinality), the database engine can join these tables very efficiently in memory. A standard index on the foreign key (`FCODE`) is most likely the better choice here rather than dealing with the maintenance of denormalization.
 
 2. `SELECT COUNT(*) FROM STUDENT WHERE FCODE = 'FTMS';`
 
