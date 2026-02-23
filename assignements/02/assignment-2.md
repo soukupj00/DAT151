@@ -404,7 +404,7 @@ Table Grade {
   student_nr varchar(15) [ref: > Student.student_nr]
   c_code varchar(10)
   c_year int
-  grade char(1)
+  GRADE Enum('A', 'B', 'C', 'D', 'E', 'F', 'N')
 
   indexes {
     (student_nr, c_code, c_year) [pk]
@@ -490,7 +490,7 @@ MariaDB [PRIVBASE]> CREATE TABLE GRADE (
     ->     STUDENT_NR CHAR(6),
     ->     CCODE CHAR(10),
     ->     CYEAR INT,
-    ->     GRADE CHAR(1),
+    ->     GRADE ENUM('A', 'B', 'C', 'D', 'E', 'F', 'N'),
     ->     PRIMARY KEY (STUDENT_NR, CCODE, CYEAR),
     ->     FOREIGN KEY (STUDENT_NR) REFERENCES STUDENT(STUDENT_NR),
     ->     FOREIGN KEY (CCODE, CYEAR) REFERENCES COURSE_SCHEDULE(CCODE, CYEAR)
