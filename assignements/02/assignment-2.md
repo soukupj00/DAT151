@@ -1,6 +1,6 @@
 # DAT151: Assignment 2 Report
 
-**Group:** 2
+**Group:** 5
 
 **Group Members:** Soukup Jan, Fabienne Feilke
 
