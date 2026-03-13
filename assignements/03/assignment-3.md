@@ -35,7 +35,6 @@ Under SELinux status we see that SELinux is already enabled and under Current mo
 ### 1b: Working with SELinux Users
 
 * **1b.1 Mapping Linux users to SELinux users:**
-*
 
 **Task:** List the mapping between Linux users and SELinux confined users on your computer.
 
@@ -51,13 +50,13 @@ Under SELinux status we see that SELinux is already enabled and under Current mo
 
 
 * **1b.2 Available SELinux Users:**
-* 
+  
 **Task:** List all available SELinux users on your computer using `seinfo`.
 
 
 * **Commands used:
 * `seinfo -u`
-* 
+  
 * ** Output:**
 
 ![Screenshot](https://github.com/user-attachments/assets/94a280af-fa1a-4269-afb1-cac4e9e40353)
@@ -88,11 +87,10 @@ Under SELinux status we see that SELinux is already enabled and under Current mo
 
 Domain Transitions (systemd to Apache) 
 
-* 
 **Task:** Verify that an Apache web server started by systemd has read access to the content of `/var/www/html`. Note: For each step below, you must use the `sesearch` command and document the applicable policy rules.
 
 
-* 
+  
 **1c.1 Is systemd allowed to start the Apache web server?** 
 
 
@@ -152,7 +150,7 @@ Domain Transitions (systemd to Apache)
 * 
 **Commands & Policy Output (`sesearch`):** 
 
-![Screenshot](https://github.com/user-attachments/assets/b60b3907-7194-40e9-b562-ef8dc27425ab")
+![Screenshot](https://github.com/user-attachments/assets/b60b3907-7194-40e9-b562-ef8dc27425ab)
 
 
 
@@ -181,7 +179,7 @@ Custom Web Directory `/www`
 
 * **Commands & Output:**
 
-![Screenshot](https://github.com/user-attachments/assets/2665a31b-e69e-4d8d-b64f-17ed0d1ee0c9")
+![Screenshot](https://github.com/user-attachments/assets/2665a31b-e69e-4d8d-b64f-17ed0d1ee0c9)
 
 
 
@@ -194,29 +192,31 @@ Custom Web Directory `/www`
 
 
 * **Commands & Output (Installation & Setup):**
-```bash
-[Paste output here]
+  
 
-```
+![Screenshot](https://github.com/user-attachments/assets/55fc6f79-1ba6-4c8d-b713-13f089ad32c0)
+
+* cd '/home/ffeilke/Downloads/myPrintInstaller_LINUX'
+* './installprinter.sh'
 
 
-* 
+![Screenshot](https://github.com/user-attachments/assets/c06c0704-48f5-4934-b2d4-f90ebfb151b6)
+
+
 **2.1 Print job from LibreOffice:**
 
+* cd /home/ffeilke/Downloads/LibreOffice_26.2.1_Linux_x86-64_rpm/LibreOffice_26.2.1.2_Linux_x86-64_rpm/RPMS
+* sudo dnf install *.rpm -y
 
-* *Screenshot or Result:* [Insert Image / Description]
+![Screenshot](https://github.com/user-attachments/assets/ccf95867-37ed-4c69-a3c5-3e2314cdbbc3)
 
 
-* 
 **2.2 Print job from command line (`lpr`):** 
 
 
 * **Commands & Output:**
-```bash
-[Paste output here]
 
-```
-
+![Screenshot](https://github.com/user-attachments/assets/0a9384e6-5ec9-415a-a15b-4d1cb7ae54dd)
 
 
 ---
@@ -226,20 +226,40 @@ Custom Web Directory `/www`
 * 
 **Task:** Find all ports open for tcp and udp connections on your computer, and list the processes and services that use these ports.
 
+* sudo ss -tulpn
+* -t: Display TCP sockets
 
-* **Commands & Output:**
-```bash
-[Paste output here]
+* -u: Display UDP sockets
 
-```
+* -l: Show only listening sockets (ports waiting for a connection)
+
+* -p: Show the process name and PID using the socket
+
+* -n: Show numerical port numbers
+
+
+![Screenshot](https://github.com/user-attachments/assets/3eaa38dd-7b2e-430b-a7b5-0cd570d5af88)
 
 
 * **Explanation of Findings:**
-* [Briefly summarize the open services]
+  
+* CUPS - Port 631 (TCP)
+* Avahi - Port 5353(UDP)
+* WSDD - Ports 3702, 39389, 34194 (UDP)
+* SSH - Port 22 (TCP)
+*  Cockpit - Port 9090 (TCP)
+*  MariaDB - Port 3306 (TCP)
+*  Coronyd -Port 323 (UDP)
+  
+*  Netid shows the type of protocoll
+*  State shows the status of that port
+*  Recv-Q shows the amount of data (in bytes) received but not yet processed by the program
+*  Send-Q shows the amount of data sent that hasn't been acknowledged by the other side yet
+*  Local Address:Port defines the internal IP address and unique port number on the local machine where a specific service is hosted and listening for traffic
+*  Peer Address:Port dentifies the remote IP address and port number of the external device that is either currently communicating with the local service or is permitted to connect to it
 
 
 
----
 
 ## Task 4: Two-Factor Authentication (2FA)
 
