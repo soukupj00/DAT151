@@ -186,7 +186,7 @@ Custom Web Directory `/www`
 
 * **Commands & Output:**
 
-![Screenshot](https://github.com/user-attachments/assets/2f6873a0-2dda-45ae-b15c-abfdc9d28113")
+![Screenshot](https://github.com/user-attachments/assets/2f6873a0-2dda-45ae-b15c-abfdc9d28113)
 
 
 
