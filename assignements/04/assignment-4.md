@@ -105,36 +105,32 @@ Also a simple `INSERT` into `T1` can lock `T2` and `T3` with the triggers - coul
 2. Add some rows to each table. The child table must have several rows referencing each row of the parent rows.
 3. Use triggers to implement the rule known as pendant DELETE (Mullins page 435): A row in the parent table should be deleted if no rows in the child table refer to it any more (when you delete the last row in the child table referencing it).
 
-**Explain the point of doing this and why it is difficult compared with other rules on p.435.**
-
 ![Screenshot 1](images/Task5/Screenshot%20From%202026-03-15%2011-52-43.png)
 
-Screenshot From 2026-03-15 11-52-43
+First we again create simple tables: parent table with 1:N relation to child table. We decided to use simple electronics categories and products for the task.
 
 ![Screenshot 2](images/Task5/Screenshot%20From%202026-03-15%2011-52-58.png)
 
-Screenshot From 2026-03-15 11-52-58
+Inserting data into the tables to form 1:N relations.
 
 ![Screenshot 3](images/Task5/Screenshot%20From%202026-03-15%2012-14-57.png)
 
-Screenshot From 2026-03-15 12-14-57
+Creating a pendant delete trigger - if the child table does not have any values referencing the parent value, delete parent value as well.
 
 ![Screenshot 4](images/Task5/Screenshot%20From%202026-03-15%2012-15-52.png)
 
-Screenshot From 2026-03-15 12-15-52
+Deletion of one categories items - the category gets deleted after the last product is deleted, as expected.
 
-![Screenshot 5](images/Task5/Screenshot%20From%202026-03-15%2012-17-00.png)
+**Explain the point of doing this and why it is difficult compared with other rules on p.435.**
 
-Screenshot From 2026-03-15 12-17-00
+1. What is the point of a Pendant DELETE?
+The purpose of a pendant DELETE is to prevent parent records that no longer serve a purpose - as they do not have any children associated with them. In many business logic scenarios (like a category that only exists to group of active products), a parent record becomes meaningless or clutters the database if it doesn't have any children associated with it. Pendant DELETE automates the cleanup of these empty parent containers.
 
-![Screenshot 6](images/Task5/Screenshot%20From%202026-03-15%2012-17-14.png)
+2. Why is it difficult compared with other rules?
 
-Screenshot From 2026-03-15 12-17-14
+No Native Support: Standard referential integrity rules (like ON DELETE CASCADE or ON DELETE SET NULL that are listed on the page 435) flow "downwards" from parent to child. They are built natively into SQL engines. Pendant DELETE flows "upwards" (child to parent) and has no native constraint syntax - it must be custom-coded using triggers.
 
-![Screenshot 7](images/Task5/Screenshot%20From%202026-03-15%2012-17-29.png)
-
-Screenshot From 2026-03-15 12-17-29
-
+It introduces concurrency and locking risks. For example, if transaction A deletes the last child row and fires the trigger to delete the parent, while at the exact same time transaction B tries to insert a new child row for that same parent, a race condition or deadlock can occur. Transaction B might successfully insert a child pointing to a parent that transaction A just deleted, completely breaking referential integrity. Proper table/row locking is required to do this safely.
 
 ---
 
@@ -149,44 +145,25 @@ Screenshot From 2026-03-15 12-17-29
 
 ![Step 1](images/Task6/part1-setup_&_load/1.png)
 
-Step 1
+First we created the tables in 3NF.
 
 ![Step 2](images/Task6/part1-setup_&_load/2.png)
 
-Step 2
+Then we created a dummy table to load all the data from the [`data.txt`](data.txt) file into. We had to use `CHARACTER SET utf8mb4` while loading to ensure we load the characters as intended.
 
 ![Step 3](images/Task6/part1-setup_&_load/3.png)
 
-Step 3
+Verification select to see if the data was loaded correctly as well as the characters.
 
 ![Step 4](images/Task6/part1-setup_&_load/4.png)
 
-Step 4
+Inserting the data into their respective tables.
 
 ![Step 5](images/Task6/part1-setup_&_load/5.png)
 
-Step 5
+Verification selects to make sure we loaded the data correctly into the tables.
 
-![Screenshot 1](images/Task6/part1-setup_&_load/Screenshot%20From%202026-03-15%2012-43-14.png)
-
-Screenshot From 2026-03-15 12-43-14
-
-![Screenshot 2](images/Task6/part1-setup_&_load/Screenshot%20From%202026-03-15%2012-43-43.png)
-
-Screenshot From 2026-03-15 12-43-43
-
-![Screenshot 3](images/Task6/part1-setup_&_load/Screenshot%20From%202026-03-15%2012-43-58.png)
-
-Screenshot From 2026-03-15 12-43-58
-
-![Screenshot 4](images/Task6/part1-setup_&_load/Screenshot%20From%202026-03-15%2012-46-02.png)
-
-Screenshot From 2026-03-15 12-46-02
-
-![Screenshot 5](images/Task6/part1-setup_&_load/Screenshot%20From%202026-03-15%2012-46-13.png)
-
-Screenshot From 2026-03-15 12-46-13
-
+After the tables vere verified we deleted the temporary dummy table.
 
 **6.2 Validation Queries**
 
@@ -196,60 +173,39 @@ i. Find the maximum number of events that a single participant will attend. (Avo
 
 ![Query i](images/Task6/part2-confirmation/i.png)
 
-Query i
-
 ii. List names of the participants that attend the largest number of events. (Do not use LIMIT, Avoid ORDER BY)
 
 ![Query ii](images/Task6/part2-confirmation/ii.png)
 
-Query ii
+After the review this was done we changed it to use `max()` instead of our initial `group by` query with the data.
 
 iii. What events are attended by Ludvig Rustad?
 
 ![Query iii](images/Task6/part2-confirmation/iii.png)
 
-Query iii
-
 iv. List participants that attend exactly 3 events.
 
 ![Query iv-1](images/Task6/part2-confirmation/iv-1.png)
 
-Query iv-1
-
 ![Query iv-2](images/Task6/part2-confirmation/iv-2.png)
-
-Query iv-2
-
-![Query iv-p1](images/Task6/part2-confirmation/iv-p1.png)
-
-Query iv-p1
-
-![Query iv-p2](images/Task6/part2-confirmation/iv-p2.png)
-
-Query iv-p2
 
 v. What events do they attend, the participants that attend 3 events? (Your query should not refer explicitly to any events, nor eventId equal to 5)
 
 ![Query v](images/Task6/part2-confirmation/v.png)
 
-Query v
-
 vi. Are there any events that is not attended by anybody that attends three events? (Your query should not refer explicitly any of the events)
 
 ![Query vi](images/Task6/part2-confirmation/vi.png)
 
-Query vi
-
 vii. Are there any events that is attended only by the participants that attend only one event? (Your query should not refer explicitly any of the events)
-
-![Query vii fixed](images/Task6/part2-confirmation/vii-fixed.png)
-
-Query vii fixed
 
 ![Query vii](images/Task6/part2-confirmation/vii.png)
 
-Query vii
+The first query that we discussed was wrong at the time.
 
+![Query vii fixed](images/Task6/part2-confirmation/vii-fixed.png)
+
+Query fixed with the `AND` clause
 
 **6.3 Stored Procedure takeSpace**
 
@@ -259,25 +215,21 @@ Query vii
 * The procedure should be accessible by concurrent users, i.e. locking is required with a 3NF model.
 * The stored procedure should not modify column totSpaces of the table Event.
 
-![1-setup](images/Task6/part3/1-setup.png)
-
-Setup
-
 ![1-setup-old](images/Task6/part3/1-setup-old.png)
 
-Setup Old
+The first try at the procedure - we discussed that it would not lock the correct table but in the end it also does, at least from the lecturers comment we got after the lab.
+
+![1-setup](images/Task6/part3/1-setup.png)
+
+Second try to lock the table correctly.
 
 ![2](images/Task6/part3/2.png)
 
-Step 2
+Create new concert event.
 
 ![3](images/Task6/part3/3.png)
 
-Step 3
-
-![Screenshot](images/Task6/part3/Screenshot%20From%202026-03-15%2013-16-02.png)
-
-Screenshot From 2026-03-15 13-16-02
+Testing the stored procedure. This works, but for actual robust testing we would need to try multiple concurrent queries.
 
 **6.4 Profiling**
 
@@ -286,31 +238,29 @@ Screenshot From 2026-03-15 13-16-02
 
 ![setup+prof-q1](images/Task6/part4/setup+prof-q1.png)
 
-Setup + Profiling Question 1
+Setup and following profiling queries
 
 ![prof-q2](images/Task6/part4/prof-q2.png)
 
-Profiling Question 2
-
 ![prof-q3](images/Task6/part4/prof-q3.png)
-
-Profiling Question 3
 
 ![prof-q4](images/Task6/part4/prof-q4.png)
 
-Profiling Question 4
-
 ![prof-q5](images/Task6/part4/prof-q5.png)
 
-Profiling Question 5
+**What takes most time?**
 
-![answer-1](images/Task6/part4/answer-1.png)
+Operations involving disk I/O take the most time, sending the data, updating and commit.
 
-Answer 1
+*** Discuss how multiple concurrent bookings for the same event would influence the time consumption.**
 
-![answer-2](images/Task6/part4/answer-2.png)
+Because our procedure uses a pessimistic lock `SELECT ... FOR UPDATE`, it prevents parallel processing for the same event row.
 
-Answer 2
+If 1,000 users try to book a space at the same event at the same time, the first user locks the row. The rest of the users are placed in a waiting queue.
+
+User 2 cannot start checking the available spaces until User 1 finishes their entire process and commits (releasing the lock).
+
+Therefore, the time consumption for concurrent users will degrade linearly. The 100th user's transaction will take significantly longer to complete than the 1st user's because their total time includes the execution time of the 99 transactions ahead of them in the lock queue.
 
 **6.5 Denormalisation**
 
@@ -320,29 +270,20 @@ Answer 2
 
 ![1-update-tables](images/Task6/part5/1-update-tables.png)
 
-Update Tables
+Updating the EVENT table with new column `booked spaces` that counts the number of bookings for the event.
 
 ![2-update-proc](images/Task6/part5/2-update-proc.png)
 
-Update Procedure
+Updating the procedure to now work with the edited table.
 
 ![3-profiling-new-data](images/Task6/part5/3-profiling-new-data.png)
 
-Profiling New Data
+Profiling new data and showing the results.
 
 ![4-prof-q1](images/Task6/part5/4-prof-q1.png)
 
-Profiling Question 1
-
 ![5-prof-q2](images/Task6/part5/5-prof-q2.png)
 
-Profiling Question 2
+The longest time now take the commits. Our old method's SELECT COUNT(*) took 0.0255 seconds. The new method completed the entire atomic UPDATE in 0.0020 seconds.
 
-![answer-1](images/Task6/part5/answer-1.png)
-
-Answer 1
-
-![answer-2-after-edit](images/Task6/part5/answer-2-after-edit.png)
-
-Answer 2 After Edit
-
+We now don't have any explicit locks - there is no `START TRANSACTION` or `FOR UPDATE` in queries 6 and 7. By moving the logic to a single UPDATE statement, the database engine handles the concurrency automatically.
