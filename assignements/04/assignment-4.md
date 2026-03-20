@@ -27,23 +27,17 @@ This report was written after Monday's 16.3. review during lab.
   
 Creating the Tables:
 
-![Screenshot 2](https://github.com/user-attachments/assets/70ba2826-3332-41c0-ab54-0cade3301d7e)
+![Screenshot 2](https://github.com/user-attachments/assets/a175115b-4b0d-4c53-84e7-2336076f4270)
+)
 
-Insert Trigger:
+The DDL of the Triggers:
 
-![Screenshot 2](https://github.com/user-attachments/assets/143ff81d-bddf-4319-8f0c-5bf617b5fbec)
+![Screenshot 2](https://github.com/user-attachments/assets/e9e2b2fd-8063-477d-bb1d-8e745fb2b7d8)
 
-Update Trigger:
-
-![Screenshot 2](https://github.com/user-attachments/assets/38711f9a-2725-4e7c-b8d9-b9c6df82fb9a)
-
-Delete Trigger:
-
-![Screenshot 2](https://github.com/user-attachments/assets/6f41b4a1-e55e-4233-923b-2582f47dc399)
 
 Demonstrate the working of the triggers:
 
-![Screenshot 2](https://github.com/user-attachments/assets/a9cb0c81-dd04-417d-b9ff-c447de14caeb)
+![Screenshot 2](https://github.com/user-attachments/assets/fd0a42ef-5f6e-437f-b7ac-f62f8330d9fa)
 
 ---
 
