@@ -24,6 +24,26 @@ This report was written after Monday's 16.3. review during lab.
 * The DDL of the triggers
 * The DDL of the tables
 * Output that demonstrates the working of the triggers
+  
+Creating the Tables:
+
+![Screenshot 2](https://github.com/user-attachments/assets/70ba2826-3332-41c0-ab54-0cade3301d7e)
+
+Insert Trigger:
+
+![Screenshot 2](https://github.com/user-attachments/assets/143ff81d-bddf-4319-8f0c-5bf617b5fbec)
+
+Update Trigger:
+
+![Screenshot 2](https://github.com/user-attachments/assets/38711f9a-2725-4e7c-b8d9-b9c6df82fb9a)
+
+Delete Trigger:
+
+![Screenshot 2](https://github.com/user-attachments/assets/6f41b4a1-e55e-4233-923b-2582f47dc399)
+
+Demonstrate the working of the triggers:
+
+![Screenshot 2](https://github.com/user-attachments/assets/a9cb0c81-dd04-417d-b9ff-c447de14caeb)
 
 ---
 
@@ -35,6 +55,20 @@ This report was written after Monday's 16.3. review during lab.
 * Do not manually create a ROW_START or ROW_END column.
 * After all modifications are done, use queries with “FOR SYSTEM_TIME AS OF” to list the before and after values after each modification of the table.
 * Every result set should show the state of the table at a specific point in time. Each result sets should include a row only once, showing the state of the row at that specific point in time.
+
+Creating the Table with data and using DELETE, UPDATE and INSERT:
+
+![Screenshot 2](https://github.com/user-attachments/assets/ee8bad51-7a5d-4787-b301-e2562156a542)
+
+List the befor and after values after each modification: 
+
+![Screenshot 2](https://github.com/user-attachments/assets/3e9f60fd-0f01-4b9a-ad2c-8e579cef3976)
+
+Showing the state of the row at that specific point in time:
+
+![Screenshot 2](https://github.com/user-attachments/assets/86596ece-73ef-406c-8f5e-599f87a829a0)
+
+
 
 ---
 
@@ -48,9 +82,18 @@ ii. The attribute total must be the sum of salary and bonus, and calculated auto
 
 *Insert some test data to verify whether your solution works. Document the output.*
 
+Implementation:
+
+![Screenshot 2](https://github.com/user-attachments/assets/d5cb37dc-9242-4db8-a5d4-ba54244918b9)
+
+Verification:
+
+![Screenshot 2](https://github.com/user-attachments/assets/5f73a22f-0c8d-4d9c-955f-0485855cab93)
+
+
 **2. Is the table 3NF?**
 
----
+For a table to be in 3NF, every non-prime attribute must be non-transitively dependent on the primary key. In this table, the total depends on salary and bonus rather than just the primary key (ID), therefore, the table is not in 3NF.
 
 ## Task 4: Order of triggers
 
