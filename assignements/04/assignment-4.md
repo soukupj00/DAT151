@@ -4,7 +4,7 @@
 
 **Group Members:** Soukup Jan, Fabienne Feilke
 
-**Date:** March ..., 2026
+**Date:** March 20, 2026
 
 This report was written after Monday's 16.3. review during lab.
 
@@ -54,7 +54,7 @@ Creating the Table with data and using DELETE, UPDATE and INSERT:
 
 ![Screenshot 2](https://github.com/user-attachments/assets/ee8bad51-7a5d-4787-b301-e2562156a542)
 
-List the befor and after values after each modification: 
+List the before and after values after each modification: 
 
 ![Screenshot 2](https://github.com/user-attachments/assets/3e9f60fd-0f01-4b9a-ad2c-8e579cef3976)
 
@@ -84,10 +84,12 @@ Verification:
 
 ![Screenshot 2](https://github.com/user-attachments/assets/5f73a22f-0c8d-4d9c-955f-0485855cab93)
 
-
 **2. Is the table 3NF?**
 
-For a table to be in 3NF, every non-prime attribute must be non-transitively dependent on the primary key. In this table, the total depends on salary and bonus rather than just the primary key (ID), therefore, the table is not in 3NF.
+For a table to be in 3NF, every non-prime attribute must be non-transitively dependent on the primary key. In this table, the total depends on salary and bonus rather than just the primary key (ID), therefore, if the total column was stored physically, the table would not be in 3NF. However, we create the value as `VIRTUAL GENERATED` - it is not stored as redundant data on disk, it's calculated dynamically during the query. As such, the physical storage of the table does comply with 3NF.
+
+---
+
 
 ## Task 4: Order of triggers
 
